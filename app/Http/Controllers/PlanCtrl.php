@@ -4,19 +4,73 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Plan;
+use App\Models\Bank;
+use App\Models\User;
+use App\Models\School;
+
 use DataTables;
 use Illuminate\Support\Facades\App;
+use Auth;
+use Carbon\Carbon;
 
 class PlanCtrl extends Controller
 {
     public function index()
     {
-        return view('backend.plan');
+        $authuser = Auth::user();
+        $authuser_id = Auth::id();
+        $role = $authuser->getRoleNames();
+        if($role[0] == "Software Admin"){
+            return view('backend.plan');
+        }else{
+            $plans = Plan::orderBy('amount')->get();
+            
+            $user = User::find($authuser_id);
+            $schoolid = $user->school_id;
+
+            $school = School::find($schoolid);
+
+            $purchase_plans = $school->plans()->where([
+                                    ['school_id', '=', $user->school_id],
+                                    ['status', '=', '0']
+                                ])->get()->toArray();
+
+            $diff_in_days = 0; $created;
+            foreach($purchase_plans as $key => $plan){
+                $created_at = Carbon::parse($plan['pivot']['created_at']);
+                $duration_str = $plan['duration'];
+                $duration_arr = explode(" ",$duration_str);
+                $duration = $duration_arr[0];
+
+                $enddate = Carbon::parse($created_at)->addMonths($duration);
+                $today = Carbon::now();
+
+                $greaterorequal_todaydate = $enddate->gte($today);
+
+                if($greaterorequal_todaydate){
+                    $created = $created_at;
+                    $diff_in_days += $enddate->diffInDays($today);
+                }else{
+                    $last_purchase_plan = last($purchase_plans);
+                    $created = $last_purchase_plan['pivot']['created_at'];
+                }
+
+            }
+            $startdate = Carbon::parse($created)->format('d M, Y');
+            $enddate = Carbon::parse($created)->addDays($diff_in_days)->format('d M,Y');
+
+            $enddatetime = Carbon::parse($created)->addDays($diff_in_days)->format('d M,Y h:i:s');
+
+
+            return view('backend.pricingplan',compact('plans','startdate','enddate','enddatetime'));
+        }
+
     }
+
+
 
     public function getlistData(Request $request)
     {
-
         $data = Plan::latest()->get();
 
         return  Datatables::of($data)
@@ -52,6 +106,8 @@ class PlanCtrl extends Controller
                     ->rawColumns(['name'],['amount'], ['duration'], ['action'])
                     ->make(true);
     }
+
+
 
     public function create()
     {
@@ -260,5 +316,180 @@ class PlanCtrl extends Controller
 
         return response()->json(['success'=>'Plan <b> DELETED </b> successfully.']);
 
+    }
+
+    public function changeForm($id){
+        $banks = Bank::whereIn('id',[2,3,4,5])->get();
+
+        $plan = Plan::find($id);
+        return view('backend.pricingplan_change',compact('plan','banks'));
+        
+    }
+
+    public function changePlan(Request $request,$id){
+        $rules = [
+            'credicard' => 'required',
+            'number' => 'required',
+            'number1' => 'required',
+            'number2' => 'required',
+            'number3' => 'required',
+            'cardholdername' => 'required',
+            'cardmonth' => 'required',
+            'cardyear' => 'required',
+            'ccv' => 'required'
+        ];
+
+        if (App::isLocale('mm')) {
+            $customMessages = [
+                'credicard.required' => 'ဤဆော့ဖ်ဝဲလ်တွင် အသုံးပြုရန် နှစ်သက်သောနည်းလမ်းကို ရွေးချယ်ပါ။',
+                'number.required' => 'ကတ်နံပါတ်အကွက် လိုအပ်သည်။',
+                'number1.required' => 'ကတ်နံပါတ်အကွက် လိုအပ်သည်။',
+                'number2.required' => 'ကတ်နံပါတ်အကွက် လိုအပ်သည်။',
+                'number3.required' => 'ကတ်နံပါတ်အကွက် လိုအပ်သည်။',
+                'cardholdername.required' => 'ကတ်ကိုင်ဆောင်သူအမည် အကွက် လိုအပ်သည်။',
+                'cardmonth.required' => 'ကတ်သက်တမ်းကုန်ဆုံးသည့်လအကွက် လိုအပ်သည်။',
+                'cardyear.required' => 'ကတ်သက်တမ်းကုန်ဆုံးသည့်နှစ်အကွက် လိုအပ်သည်။',
+                'ccv.required' => 'ccv အကွက် လိုအပ်သည်။'
+            ];
+        }
+        else if (App::isLocale('jp')) {
+            $customMessages = [
+                'credicard.required' => 'このソフトウェアで使用する優先方法を選択してください。',
+                'number.required' => 'カード番号フィールドは必須です。s',
+                'number1.required' => 'カード番号フィールドは必須です。',
+                'number2.required' => 'カード番号フィールドは必須です。',
+                'number3.required' => 'カード番号フィールドは必須です。',
+                'cardholdername.required' => 'カード所有者名フィールドは必須です。',
+                'cardmonth.required' => 'カードの有効期限の月のフィールドは必須です。',
+                'cardyear.required' => 'カードの有効期限フィールドは必須です。',
+                'ccv.required' => 'ccvフィールドは必須です。'
+            ];
+        }
+        else if (App::isLocale('cn')) {
+            $customMessages = [
+                'credicard.required' => '请选择在此软件上使用的首选方法。s',
+                'number.required' => '卡号字段是必需的。',
+                'number1.required' => '卡号字段是必需的。',
+                'number2.required' => '卡号字段是必需的。',
+                'number3.required' => '卡号字段是必需的。',
+                'cardholdername.required' => '持卡人姓名字段为必填项。',
+                'cardmonth.required' => '卡到期月份字段为必填项。',
+                'cardyear.required' => '卡到期年份字段为必填项。',
+                'ccv.required' => 'ccv 字段是必需的。'
+            ];
+        }
+        else if (App::isLocale('de')) {
+            $customMessages = [
+                'credicard.required' => 'Bitte wählen Sie die bevorzugte Methode für diese Software aus.',
+                'number.required' => 'Das Feld Kartennummer ist erforderlich.',
+                'number1.required' => 'Das Feld Kartennummer ist erforderlich.',
+                'number2.required' => 'Das Feld Kartennummer ist erforderlich.',
+                'number3.required' => 'Das Feld Kartennummer ist erforderlich.',
+                'cardholdername.required' => 'Das Feld Name des Karteninhabers ist erforderlich.',
+                'cardmonth.required' => 'Das Feld für den Ablaufmonat der Karte ist erforderlich.',
+                'cardyear.required' => 'Das Feld für das Ablaufjahr der Karte ist erforderlich.',
+                'ccv.required' => 'Das ccv-Feld ist erforderlich.'
+            ];
+        }
+        else if (App::isLocale('fr')) {
+            $customMessages = [
+                'credicard.required' => 'Veuillez sélectionner la méthode préférée à utiliser sur ce logiciel.',
+                'number.required' => 'Le champ du numéro de carte est obligatoire.',
+                'number1.required' => 'Le champ du numéro de carte est obligatoire.',
+                'number2.required' => 'Le champ du numéro de carte est obligatoire.',
+                'number3.required' => 'Le champ du numéro de carte est obligatoire.',
+                'cardholdername.required' => 'Le champ du nom du titulaire de la carte est obligatoire.',
+                'cardmonth.required' => "Le champ du mois d'expiration de la carte est obligatoire.",
+                'cardyear.required' => "Le champ Année d'expiration de la carte est obligatoire.",
+                'ccv.required' => 'Le champ ccv est obligatoire.'
+            ];
+        }
+        else{
+            $customMessages = [
+                'credicard.required' => 'Please select preferred method to use on this software.',
+                'number.required' => 'The card number field is required.',
+                'number1.required' => 'The card number field is required.',
+                'number2.required' => 'The card number field is required.',
+                'number3.required' => 'The card number field is required.',
+                'cardholdername.required' => 'The card holder name field is required.',
+                'cardmonth.required' => 'The card expiration month field is required.',
+                'cardyear.required' => 'The card expiration year field is required.',
+                'ccv.required' => 'The ccv field is required.',
+            ];
+        }
+
+        $this->validate($request, $rules, $customMessages);
+
+        $purchase_plans = $school->plans()->where([
+                                ['school_id', '=', $user->school_id],
+                                ['status', '=', '0']
+                            ])->get()->toArray();
+
+        $diff_in_days = 0; $created;
+        foreach($purchase_plans as $key => $plan){
+            $created_at = Carbon::parse($plan['pivot']['created_at']);
+            $duration_str = $plan['duration'];
+            $duration_arr = explode(" ",$duration_str);
+            $duration = $duration_arr[0];
+
+            $enddate = Carbon::parse($created_at)->addMonths($duration);
+            $today = Carbon::now();
+
+            $result = $enddate->lt($today);
+            if($result){
+                $plan->schools()->updateExistingPivot($plan, array('status' => 1), false);
+            }
+        }
+
+        $authuser = Auth::user();
+        $authuser_id = Auth::id();
+        $role = $authuser->getRoleNames();
+
+        $schoolid = $authuser->school_id;
+        $school = School::find($schoolid);
+
+        $school->plans()->attach($id,['user_id' => $authuser_id]);
+
+        return \Redirect::route('master.plan.index')->with('success','Plan has been created.');
+    }
+
+    public function getlistPlanhistory(Request $request){
+        $authuser = Auth::user();
+        $authuser_id = Auth::id();
+        $role = $authuser->getRoleNames();
+
+        $user = User::find($authuser_id);
+        $schoolid = $user->school_id;
+
+        $school = School::find($schoolid);
+
+        $data = $school->plans()->where('school_id',$user->school_id)->orderby('pivot_created_at','DESC')->get();
+
+
+        return  Datatables::of($data)
+                    ->addColumn('plan', function(Plan $plan) {
+                        $name = $plan->name.' ('.$plan->amount.')';
+                        return $name;
+                    })
+                    ->addColumn('startdate', function(Plan $plan) {
+
+                        $date = Carbon::create($plan->pivot->created_at)->format('d M,Y h:i:s');
+                        return $date;
+                    })
+                    ->addColumn('enddate', function(Plan $plan) {
+                        $startdate = $plan->pivot->created_at;
+
+                        $duration_str = $plan->duration;
+                        $duration_arr = (explode(" ",$duration_str));
+                        $duration = $duration_arr[0];
+
+                        $enddate = Carbon::create($startdate)->addMonths($duration);
+                        $date = Carbon::create($enddate)->format('d M,Y h:i:s');
+
+
+                        return $date;
+                    })
+                    ->rawColumns(['plan'],['startdate'], ['enddate'])
+                    ->make(true);
     }
 }

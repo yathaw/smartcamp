@@ -11,7 +11,7 @@ class Teachersegment extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['user_id', 'batch_id', 'staff_id', 'curriculum_id' ,'section_id', 'school_id'];
+    protected $fillable=['duration', 'txtcolor', 'bgcolor', 'user_id', 'batch_id', 'staff_id', 'curriculum_id' ,'section_id', 'school_id'];
 
     public function user()
     {

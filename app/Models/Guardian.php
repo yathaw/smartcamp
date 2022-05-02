@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Guardian extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
 
-    protected $fillable=['relatiionship', 'phone', 'occupation', 'user_id', 'staff_id'];
+    protected $fillable=['workemail', 'relatiionship', 'phone', 'occupation', 'user_id', 'staff_id'];
 
     public function user()
     {
@@ -24,6 +24,6 @@ class Guardian extends Model
 
     public function students()
     {
-        return $this->hasMany('App\Models\Student');
+        return $this->belongsToMany('App\Models\Student');
     }
 }

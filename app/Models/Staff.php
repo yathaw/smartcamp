@@ -75,4 +75,9 @@ class Staff extends Model
         return $this->hasOne('App\Models\Schedule');
     }
 
+    public function transfer()
+    {
+        return $this->hasOne('App\Models\Transfer');
+    }
+
 }

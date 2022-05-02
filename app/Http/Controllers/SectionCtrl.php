@@ -19,6 +19,9 @@ use App\Models\Batch;
 use App\Models\Teachersegment;
 use App\Models\Currency;
 use App\Models\Curriculum;
+use App\Models\Student;
+use App\Models\Studentsegment;
+
 
 
 class SectionCtrl extends Controller
@@ -287,7 +290,12 @@ class SectionCtrl extends Controller
                     ->where('grade_id', $section->grade_id)
                     ->get()
                     ->sortBy('subject.sorting');
-        return view('backend.section.show',compact('section','packages','batches','currencies','curricula'));
+
+        $batchids = Batch::where('section_id',$section->id)->pluck('id');
+
+        $studentsegments = Studentsegment::whereIn('batch_id',$batchids)->get()->count();
+
+        return view('backend.section.show',compact('section','packages','batches','currencies','curricula','studentsegments'));
     }
 
     public function edit(Section $section)

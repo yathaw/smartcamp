@@ -11,7 +11,7 @@ class Expense extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['title', 'amount', 'status', 'date', 'photo', 'expensetype_id', 'user_id'];
+    protected $fillable=['title', 'amount', 'date', 'photo', 'expensetype_id', 'user_id', 'school_id'];
 
 
     public function expensetype()
@@ -22,6 +22,11 @@ class Expense extends Model
     public function user()
     {
         return $this->belongsTo('App\Models\User');
+    }
+
+    public function school()
+    {
+        return $this->belongsTo('App\Models\School');
     }
 
 }

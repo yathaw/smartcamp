@@ -43,26 +43,51 @@
         <!-- Colorpicker CSS -->
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/colorpicker/themes/classic.min.css') }}">
 
-        <style type="text/css">
-            @php 
-                $currentLanguage = Config::get('app.locale');
-                if ($currentLanguage == 'mm'):
-                    
-                else if ($currentLanguage == 'jp'):
-                    
-                else if ($currentLanguage == 'cn'):
-                    $language = "中國";
-                else if ($currentLanguage == 'de'):
-                    $language = "Deutschland";
-                else if ($currentLanguage == 'fr'):
-                    $language = "La France";
-                else:
-                    $language = "English";
-                @endif
-            @endphp
-        </style>
+        <!-- Duration Picker CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/durationpicker/duration.css') }}">
 
-        @php $backendComponents = ["login", "register", "master", "verify","procedure"] @endphp
+        <!-- Image Zoom Effect -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/magific/magnific-popup.css') }}">
+
+        <!-- Count Down -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/countdown/css/jquery.countdown.css') }}">
+
+        <!-- Tag Input -->
+        <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/plyr/plyr.css') }}">
+
+        @php 
+            $currentLanguage = Config::get('app.locale');
+        @endphp
+            
+            @if ($currentLanguage == 'mm'):
+                <style type="text/css">
+                    body{
+                        font-family:  NotoSansMyanmar-Regular;
+                    }
+                    h1, h2, h3, h4, h5, h6 {
+                        font-family:  NotoSerifMyanmar-Bold;
+                    }
+                </style>
+            @elseif ($currentLanguage == 'jp'):
+                    
+            @elseif ($currentLanguage == 'cn'):
+            @elseif ($currentLanguage == 'de'):
+            @elseif ($currentLanguage == 'fr'):
+            @else:
+                <style type="text/css">
+
+                    body{
+                        font-family: 'lato_regular';
+                    }
+                    h1, h2, h3, h4, h5, h6 {
+                      font-family: 'montserrat_medium';
+                    }
+                </style>
+
+            @endif
+
+        @php $backendComponents = ["login", "register", "master", "verify","procedure", "controlpanel"] @endphp
         @if(in_array(Request::segment(1),$backendComponents))
             <link href="{{ asset('assets/css/backendstyle.css') }}" rel="stylesheet">
         @else
@@ -78,11 +103,14 @@
 
     </head>
     <body>
-        @php $authComponents = ["login", "register", "verify","procedure"] @endphp
+        @php $authComponents = ["login", "register", "verify","procedure", "prnpriview"] @endphp
         @if(!in_array(Request::segment(1),$authComponents))
 
             @if(Request::segment(1) === 'master')
                 @include('components.backendheader')
+            @elseif(Request::segment(1) === 'controlpanel')
+                @include('components.backendheader')
+
             @else
                 @include('components.frontendheader')
             @endif
@@ -99,6 +127,9 @@
 
         @if(Request::segment(1) === 'master')
             @include('components.backendfooter')
+        @elseif(Request::segment(1) === 'controlpanel')
+            @include('components.backendfooter')
+
         @else
             @include('components.frontendfooter')
         @endif
@@ -139,6 +170,23 @@
         <!-- Colorpicker JS -->
         <script src="{{ asset('assets/vendor/colorpicker/pickr.min.js') }}"></script>
 
+        <!-- Duration Picker JS -->
+        <script src="{{ asset('assets/vendor/durationpicker/duration.js') }}"></script>
+
+        <!-- Image Zoom Effect -->
+        <script src="{{ asset('assets/vendor/magific/jquery.magnific-popup.js') }}"></script>
+
+        <!-- Count Down -->
+        <script src="{{ asset('assets/vendor/countdown/js/jquery.plugin.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/countdown/js/jquery.countdown.js') }}"></script>
+
+        <script src="{{ asset('assets/js/jquery.printPage.js') }}"></script>
+
+        <script src="https://unpkg.com/@yaireo/tagify"></script>
+        <script src="https://unpkg.com/@yaireo/tagify@3.1.0/dist/tagify.polyfills.min.js"></script>
+
+        <script src="{{ asset('assets/vendor/plyr/plyr_plugin.js') }}"></script>
+        <script src="{{ asset('assets/vendor/plyr/default.js') }}"></script>
 
         @if(in_array(Request::segment(1),$backendComponents))
         <script src="{{ asset('assets/js/backendmain.js') }}"></script>

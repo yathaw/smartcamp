@@ -958,7 +958,7 @@ class RegisterCtrl extends Controller
         $user->profile_photo_path = $profilepath;
         $user->save();
 
-        $user->plans()->attach($planid);
+        $school->plans()->attach($planid,['user_id' => $user->id]);
 
 
         $status = 'Active';

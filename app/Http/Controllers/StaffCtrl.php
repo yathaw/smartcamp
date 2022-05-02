@@ -50,7 +50,7 @@ class StaffCtrl extends Controller
                 ->addIndexColumn()
                 ->addColumn('name', function(Staff $staff) {
 
-                    $profile = $staff->user->profile_photo_paths;
+                    $profile = asset($staff->user->profile_photo_path);
                     $name = $staff->user->name;
                     $phones = json_decode($staff->phone,true);
 
@@ -433,8 +433,8 @@ class StaffCtrl extends Controller
         $phoneno = $request->phoneno; 
         $position = $request->position;
         $joindate = $request->joindate; 
-        $blood = $request->blood; 
-        $religion = $request->religion; 
+        $blood = $request->bloodid; 
+        $religion = $request->religionid; 
         $degree = $request->degree;
         $cvfile = $request->file; 
 

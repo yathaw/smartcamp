@@ -23,11 +23,8 @@ class AddColorToGradesTable extends Migration
         //     $table->renameColumn('color', 'bgcolor');
         // });
 
-        Schema::table('schedules', function (Blueprint $table) {
-            // $table->dropColumn(['date']);
-            // $table->string('txtcolor')->after('color');
-            $table->renameColumn('color', 'bgcolor');
-        });
+        // Schema::drop('schedules');
+ 
     }
 
     /**

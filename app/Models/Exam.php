@@ -12,11 +12,11 @@ class Exam extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['name', 'startdate', 'enddate', 'rule', 'batch_id', 'user_id', 'school_id'];
+    protected $fillable=['name', 'startdate', 'enddate', 'rule', 'section_id', 'user_id', 'school_id'];
 
-    public function batch()
+    public function section()
     {
-        return $this->belongsTo('App\Models\Batch');
+        return $this->belongsTo('App\Models\Section');
     }
 
     public function user()

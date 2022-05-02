@@ -34,9 +34,19 @@ class Grade extends Model
         return $this->hasManyThrough(Syllabus::class, Curriculum::class);
     }
 
+    public function lessons()
+    {
+        return $this->hasManyThrough(Lesson::class, Curriculum::class);
+    }
+
     public function subjecttypes()
     {
         return $this->belongsToMany('App\Models\Subjecttype', 'curricula')
                     ->groupBy('curricula.grade_id', 'curricula.subjecttype_id');
+    }
+
+    public function gradebatch()
+    {
+        return $this->hasOneThrough(Batch::class, Section::class);
     }
 }

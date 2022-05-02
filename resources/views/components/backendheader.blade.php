@@ -6,7 +6,7 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
     <div class="d-flex align-items-center justify-content-between">
         <a href="index.html" class="logo d-flex align-items-center">
-            @if($authuser->school->name)
+            @if($authRole != "Software Admin")
                 <img src="{{ asset($authuser->school->logo) }}" alt="">
                 <span class="d-none d-lg-block"> {{ $authuser->school->name }} </span>
             @else
@@ -311,70 +311,6 @@
             </li>
             <!-- End Language Nav -->
 
-            <li class="nav-item dropdown">
-                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                <i class="bi bi-bell"></i>
-                <span class="badge bg-primary badge-number">4</span>
-                </a><!-- End Notification Icon -->
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                    <li class="dropdown-header">
-                        You have 4 new notifications
-                        <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li class="notification-item">
-                        <i class="bi bi-exclamation-circle text-warning"></i>
-                        <div>
-                            <h4>Lorem Ipsum</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>30 min. ago</p>
-                        </div>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li class="notification-item">
-                        <i class="bi bi-x-circle text-danger"></i>
-                        <div>
-                            <h4>Atque rerum nesciunt</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>1 hr. ago</p>
-                        </div>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li class="notification-item">
-                        <i class="bi bi-check-circle text-success"></i>
-                        <div>
-                            <h4>Sit rerum fuga</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>2 hrs. ago</p>
-                        </div>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li class="notification-item">
-                        <i class="bi bi-info-circle text-primary"></i>
-                        <div>
-                            <h4>Dicta reprehenderit</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>4 hrs. ago</p>
-                        </div>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li class="dropdown-footer">
-                        <a href="#">Show all notifications</a>
-                    </li>
-                </ul>
-                <!-- End Notification Dropdown Items -->
-            </li>
-            <!-- End Notification Nav -->
             
             <li class="nav-item dropdown pe-3">
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
@@ -390,7 +326,7 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                        <a class="dropdown-item d-flex align-items-center" href="{{ route('master.profile.index') }}">
                         <i class="bi bi-person"></i>
                         <span>My Profile</span>
                         </a>
@@ -399,7 +335,7 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                        <a class="dropdown-item d-flex align-items-center" href="#">
                         <i class="bi bi-gear"></i>
                         <span>Account Settings</span>
                         </a>
@@ -408,7 +344,7 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                        <a class="dropdown-item d-flex align-items-center" href="#">
                         <i class="bi bi-question-circle"></i>
                         <span>Need Help?</span>
                         </a>
@@ -417,9 +353,13 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <span>Sign Out</span>
+                        <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                   document.getElementById('logout-form').submit();">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Sign Out</span>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </a>
                     </li>
                 </ul>
@@ -436,21 +376,21 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <!-- All User -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="">
+{{--         <li class="nav-item">
+            <a class="nav-link @if(Request::segment(2) != 'dashboard') collapsed @endif" href="">
             <i class="bi bi-grid"></i>
             <span>{{ __("Dashboard")}}</span>
             </a>
-        </li>
+        </li> --}}
 
         <!-- Software Admin -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="">
+            <a class="nav-link @if(Request::segment(2) != 'school') collapsed @endif" href="{{ route('master.school.index') }}">
             <i class='bi bi-building'></i>
             <span>{{ __("School")}}</span>
             </a>
         </li>
-
+        @if(in_array($authRole,["Principal", "School Admin"]))
         <!-- Software Admin -->
         <li class="nav-item ">
             <a class="nav-link @if(Request::segment(2) != 'plan') collapsed @endif " href="{{ route('master.plan.index') }}">
@@ -458,13 +398,18 @@
             <span>{{ __("Pricing Plan")}}</span>
             </a>
         </li>
+        @endif
 
         <!-- Software Admin -->
         @php 
             $components = ["role", "grade", "expensetype", "schooltype", "bank", "blood", "religion", "city", "state", "country"];
 
             $classroutine = ["scheduletype", "holiday", "schedule"];
+
+            $studentroutine = ["student","admission","transfer"];
+
         @endphp
+        @if($authRole == "Software Admin")
         <li class="nav-item">
             <a class="nav-link @if(!in_array(Request::segment(2),$components)) collapsed @endif " data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
             <i class="bi bi-menu-button-wide"></i><span>{{ __("Components")}}</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -530,88 +475,193 @@
                 </li>
             </ul>
         </li>
-        
-        <!-- School Admin / Principal / Staff -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="">
-            <i class="bi bi-bar-chart"></i>
-            <span>{{ __("Report")}}</span>
-            </a>
-        </li>
+        @endif
+
+        @if(in_array($authRole,["Principal", "School Admin"]))
+            @if($authuser->hasAnyPermission(['Expense List']))
+            <!-- School Admin / Principal / Staff -->
+            <li class="nav-item">
+                <a class="nav-link @if(Request::segment(2) != 'report') collapsed @endif" href="{{ route('master.report.index') }}">
+                <i class="bi bi-bar-chart"></i>
+                <span>{{ __("Report")}}</span>
+                </a>
+            </li>
+            @endif
+        @endif
+
+        @if(in_array($authRole,["School Admin", "Principal", "Staff", "Teacher","Guardian"]))
+            <!-- School Admin -->
+            @if($authuser->hasAnyPermission(['Fees List']))
+            <li class="nav-item">
+                <a class="nav-link @if(Request::segment(2) != 'installment') collapsed @endif" href="{{ route('master.installment') }}">
+                    <i class="bi bi-cash-coin"></i>
+                    <span>{{ __("Installment")}}</span>
+                </a>
+            </li>
+            @endif
+        @endif
+
+        @if(in_array($authRole,["School Admin", "Principal", "Staff", "Teacher"]))
+        <!-- School Admin -->
+            @if($authuser->hasAnyPermission(['Expense List']))
+            <li class="nav-item">
+                <a class="nav-link @if(Request::segment(2) != 'expense') collapsed @endif" href="{{ route('master.expense.index') }}">
+                    <i class="bi bi-receipt"></i>
+                    <span>{{ __("Expense")}}</span>
+                </a>
+            </li>
+            @endif
+        @endif
 
         <!-- School Admin -->
+        @if(in_array($authRole,["Guardian", "Student"]))
         <li class="nav-item">
-            <a class="nav-link collapsed" href="">
-            <i class="bi bi-cash-coin"></i>
-            <span>{{ __("Installment")}}</span>
-            </a>
-        </li>
-
-        <!-- School Admin -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="">
-            <i class="bi bi-receipt"></i>
-            <span>{{ __("Expense")}}</span>
-            </a>
-        </li>
-
-        <!-- School Admin -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="">
+            <a class="nav-link @if(Request::segment(2) != 'attendance') collapsed @endif" href="{{ route('master.attendance.index') }}">
             <i class="bi bi-person-check"></i>
             <span>{{ __("Attendance")}}</span>
             </a>
         </li>
+        @endif
 
+        @if(in_array($authRole,["School Admin", "Principal", "Staff", "Teacher"]))
+            @if($authuser->hasAnyPermission(['Attendance List']))
+            <li class="nav-item">
+                <a class="nav-link @if(Request::segment(2) != 'attendance') collapsed @endif" href="{{ route('master.attendance.index') }}">
+                <i class="bi bi-person-check"></i>
+                <span>{{ __("Attendance")}}</span>
+                </a>
+            </li>
+            @endif
+        
         <!-- School Admin -->
+        @if($authuser->hasAnyPermission(['Exam List']))
         <li class="nav-item">
-            <a class="nav-link collapsed" href="">
-            <i class="bi bi-hourglass"></i>
-            <span>{{ __("Exam")}}</span>
-            </a>
-        </li>
-
-        <!-- School Admin -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="">
-            <i class="bi bi-clipboard-check"></i>
-            <span>{{ __("Result")}}</span>
-            </a>
-        </li>
-
-
-        <!-- School Admin -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#student-nav" data-bs-toggle="collapse" href="#">
-                <i class='bx bx-user'></i>
-                <span>{{ __("Students")}}</span>
+            <a class="nav-link @if(Request::segment(2) != 'exam') collapsed @endif" data-bs-target="#exam-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-hourglass"></i>
+                <span>{{ __("Exam")}}</span>
                 <i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="student-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="exam-nav" class="nav-content collapse @if(Request::segment(2) == 'exam' ) show @endif" data-bs-parent="#sidebar-nav">
+                @if($authuser->hasAnyPermission(['Exam List']))
+                <li>
+                    <a href="{{ route('master.exam.index') }}" class="@if(Request::segment(2) == 'exam' && Request::segment(3) == null) active @endif">
+                    <i class="bi bi-circle"></i><span>{{ __("All Exam")}}</span>
+                    </a>
+                </li>
+                @endif
 
+                @if($authuser->hasAnyPermission(['Exam Create']))
                 <li>
-                    <a href="">
-                    <i class="bi bi-circle"></i><span>{{ __("All Students")}}</span>
+                    <a href="{{ route('master.exam.create') }}" class="@if(Request::segment(2) == 'exam' && Request::segment(3) == 'create') active @endif">
+                    <i class="bi bi-circle"></i><span>{{ __("Add New Exam")}}</span>
                     </a>
                 </li>
-
-                <li>
-                    <a href="">
-                    <i class="bi bi-circle"></i><span>{{ __("Admission Form")}}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                    <i class="bi bi-circle"></i><span>{{ __("Transfer Form")}}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                    <i class="bi bi-circle"></i><span>{{ __("Resignation Form")}}</span>
-                    </a>
-                </li>
+                @endif
             </ul>
         </li>
+        @endif
+        @endif
+
+        @if(in_array($authRole,["Guardian", "Student"]))
+            <li class="nav-item">
+                <a class="nav-link @if(Request::segment(2) != 'exam') collapsed @endif" href="{{ route('master.exam.index') }}">
+                    <i class="bi bi-hourglass"></i>
+                    <span>{{ __("Exam")}}</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @if(Request::segment(2) != 'result') collapsed @endif" href="{{ route('master.result.index') }}">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span>{{ __("Result")}}</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @if(Request::segment(2) != 'schedule') collapsed @endif" href="{{ route('master.schedule.index') }}">
+                    <i class='bi bi-calendar4-range'></i>
+                    <span>{{ __("Class Routine")}}</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ route('master.syllabus.index') }}" class="nav-link @if(Request::segment(2) != 'syllabus') collapsed @endif">
+
+                    <i class="bi bi-journal-bookmark"></i>
+                    <span>{{ __("Syllabus")}}</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ route('master.lesson.index') }}" class="nav-link @if(Request::segment(2) != 'lesson') collapsed @endif">
+
+                   <i class="bi bi-file-play"></i>
+                    <span>{{ __("Lesson Video")}}</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ route('master.recording.index') }}" class="nav-link @if(Request::segment(2) != 'recording') collapsed @endif">
+
+                   <i class="bi bi-person-video2"></i>
+                    <span>{{ __("Live Recording Video")}}</span>
+                </a>
+            </li>
+        @endif
+        
+        @if(in_array($authRole,["School Admin", "Principal", "Staff", "Teacher"]))
+        <!-- School Admin -->
+        @if($authuser->hasAnyPermission(['Result List']))
+        <li class="nav-item">
+            <a class="nav-link @if(Request::segment(2) != 'result') collapsed @endif" href="{{ route('master.result.index') }}">
+                <i class="bi bi-clipboard-check"></i>
+                <span>{{ __("Result")}}</span>
+            </a>
+        </li>
+        @endif
+
+        @if($authuser->hasAnyPermission(['Student List']))
+            <li class="nav-item">
+                <a class="nav-link @if(!in_array(Request::segment(2),$studentroutine)) collapsed @endif " data-bs-target="#student-nav" data-bs-toggle="collapse" href="#">
+                    <i class='bx bx-user'></i>
+                    <span>{{ __("Students")}}</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="student-nav" class="nav-content collapse @if(in_array(Request::segment(2),$studentroutine)) show @endif" data-bs-parent="#sidebar-nav">
+                    @if($authuser->hasAnyPermission(['Student List']))
+                    <li>
+                        <a class="@if(Request::segment(2) == 'student' && Request::segment(3) == null) active @endif " href="{{ route('master.student.index') }}">
+                        <i class="bi bi-circle"></i><span>{{ __("All Students")}}</span>
+                        </a>
+                    </li>
+                    @endif
+
+                    @if($authuser->hasAnyPermission(['Student Admission']))
+                    <li>
+                        <a class="@if(Request::segment(2) == 'admission' && Request::segment(3) == null) active @endif " href="{{ route('master.admission') }}">
+                        <i class="bi bi-circle"></i><span>{{ __("Admission Form")}}</span>
+                        </a>
+                    </li>
+                    @endif
+
+                    @if($authuser->hasAnyPermission(['Student Transfer']))
+                    <li>
+                        <a class="@if(Request::segment(2) == 'transfer' && Request::segment(3) == null) active @endif " href="{{ route('master.transfer') }}">
+                        <i class="bi bi-circle"></i><span>{{ __("Transfer Form")}}</span>
+                        </a>
+                    </li>
+                    @endif 
+
+                    @if($authuser->hasAnyPermission(['Student Create']))
+                    <li>
+                        <a class="@if(Request::segment(2) == 'student' && Request::segment(3) == 'create') active @endif"  href="{{ route('master.student.create') }}">
+                        <i class="bi bi-circle"></i><span>{{ __("Resignation Form")}}</span>
+                        </a>
+                    </li>
+                    @endif
+                </ul>
+            </li>
+        @endif
 
         <!-- School Admin -->
         <li class="nav-item">
@@ -623,31 +673,20 @@
             <ul id="class-nav" class="nav-content collapse @if(in_array(Request::segment(2),$classroutine)) show @endif " data-bs-parent="#sidebar-nav">
 
                 <li>
-                    <a href="">
-                        <i class="bi bi-circle"></i><span>{{ __("Timetable")}}</span>
+                    <a class="@if(Request::segment(2) == 'schedule') active @endif " href="{{ route('master.schedule.index') }}">
+                        <i class="bi bi-circle"></i><span>{{ __("Schedule")}}</span>
                     </a>
                 </li>
 
                 <li>
-                    <a class="nav-link @if(Request::segment(2) != 'schedule') collapsed @endif " href="{{ route('master.schedule.create') }}">
-                        <i class="bi bi-circle"></i><span>{{ __("Add New Routine")}}</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a class="nav-link @if(Request::segment(2) != 'holiday') collapsed @endif " href="{{ route('master.holiday.index') }}">
+                    <a class="@if(Request::segment(2) == 'holiday') active @endif " href="{{ route('master.holiday.index') }}">
                         <i class="bi bi-circle"></i><span>{{ __("Holiday")}}</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a class="nav-link @if(Request::segment(2) != 'scheduletype') collapsed @endif " href="{{ route('master.scheduletype.index') }}">
-                        <i class="bi bi-circle"></i><span>{{ __("Schedule Type")}}</span>
                     </a>
                 </li>
             </ul>
         </li>
 
+        @if($authuser->hasAnyPermission(['Section List']))
         <!-- School Admin -->
         <li class="nav-item">
             <a class="nav-link @if(Request::segment(2) != 'section') collapsed @endif " href="{{ route('master.section.index') }}">
@@ -655,7 +694,9 @@
             <span>{{ __("Section")}}</span>
             </a>
         </li>
+        @endif
 
+        @if($authuser->hasAnyPermission(['Period List']))
         <!-- School Admin -->
         <li class="nav-item">
             <a class="nav-link @if(Request::segment(2) != 'period') collapsed @endif " href="{{ route('master.period.index') }}">
@@ -663,7 +704,9 @@
             <span>{{ __("Period Year")}}</span>
             </a>
         </li>
+        @endif
 
+        @if($authuser->hasAnyPermission(['Staff List']))
         <!-- School Admin -->
         <li class="nav-item">
             <a class="nav-link @if(Request::segment(2) != 'staff') collapsed @endif" data-bs-target="#staff-nav" data-bs-toggle="collapse" href="#">
@@ -687,6 +730,9 @@
             </ul>
         </li>
 
+        @endif
+
+        @if($authuser->hasAnyPermission(['Department List']))
         <!-- School Admin | Pricipal -->
         <li class="nav-item">
             <a class="nav-link @if(Request::segment(2) != 'department') collapsed @endif" href="{{ route('master.department.index') }}">
@@ -694,7 +740,65 @@
             <span>{{ __("Position & Departments")}}</span>
             </a>
         </li>
+        @endif
 
+        @if($authuser->hasAnyPermission(['Recording List']))
+        <!-- School Admin -->
+        <li class="nav-item">
+            <a class="nav-link @if(Request::segment(2) != 'recording') collapsed @endif" data-bs-target="#recording-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-person-video2"></i>
+                <span>{{ __("Live Recording Video")}}</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="recording-nav" class="nav-content collapse @if(Request::segment(2) == 'recording' ) show @endif" data-bs-parent="#sidebar-nav">
+                @if($authuser->hasAnyPermission(['Recording List']))
+                <li>
+                    <a href="{{ route('master.recording.index') }}" class="@if(Request::segment(2) == 'recording' && Request::segment(3) == null) active @endif">
+                    <i class="bi bi-circle"></i><span>{{ __("All Recording")}}</span>
+                    </a>
+                </li>
+                @endif
+
+                @if($authuser->hasAnyPermission(['Recording Create']))
+                <li>
+                    <a href="{{ route('master.recording.create') }}" class="@if(Request::segment(2) == 'recording' && Request::segment(3) == 'create') active @endif">
+                    <i class="bi bi-circle"></i><span>{{ __("Add New Recording")}}</span>
+                    </a>
+                </li>
+                @endif
+            </ul>
+        </li>
+        @endif
+
+        @if($authuser->hasAnyPermission(['Lesson List']))
+        <!-- School Admin -->
+        <li class="nav-item">
+            <a class="nav-link @if(Request::segment(2) != 'lesson') collapsed @endif" data-bs-target="#lesson-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-file-play"></i>
+                <span>{{ __("Lesson")}}</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="lesson-nav" class="nav-content collapse @if(Request::segment(2) == 'lesson' ) show @endif" data-bs-parent="#sidebar-nav">
+                @if($authuser->hasAnyPermission(['Lesson List']))
+                <li>
+                    <a href="{{ route('master.lesson.index') }}" class="@if(Request::segment(2) == 'lesson' && Request::segment(3) == null) active @endif">
+                    <i class="bi bi-circle"></i><span>{{ __("All Lesson")}}</span>
+                    </a>
+                </li>
+                @endif
+
+                @if($authuser->hasAnyPermission(['Lesson Create']))
+                <li>
+                    <a href="{{ route('master.lesson.create') }}" class="@if(Request::segment(2) == 'lesson' && Request::segment(3) == 'create') active @endif">
+                    <i class="bi bi-circle"></i><span>{{ __("Add New Lesson")}}</span>
+                    </a>
+                </li>
+                @endif
+            </ul>
+        </li>
+        @endif
+
+        @if($authuser->hasAnyPermission(['Syllabuses List']))
         <!-- School Admin -->
         <li class="nav-item">
             <a class="nav-link @if(Request::segment(2) != 'syllabus') collapsed @endif" data-bs-target="#syllabus-nav" data-bs-toggle="collapse" href="#">
@@ -703,21 +807,26 @@
                 <i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="syllabus-nav" class="nav-content collapse @if(Request::segment(2) == 'syllabus' ) show @endif" data-bs-parent="#sidebar-nav">
-
+                @if($authuser->hasAnyPermission(['Syllabuses List']))
                 <li>
                     <a href="{{ route('master.syllabus.index') }}" class="@if(Request::segment(2) == 'syllabus' && Request::segment(3) == null) active @endif">
                     <i class="bi bi-circle"></i><span>{{ __("All Syllabi")}}</span>
                     </a>
                 </li>
+                @endif
 
+                @if($authuser->hasAnyPermission(['Syllabuses Create']))
                 <li>
                     <a href="{{ route('master.syllabus.create') }}" class="@if(Request::segment(2) == 'syllabus' && Request::segment(3) == 'create') active @endif">
                     <i class="bi bi-circle"></i><span>{{ __("Add New Syllabus")}}</span>
                     </a>
                 </li>
+                @endif
             </ul>
         </li>
+        @endif
 
+        @if($authuser->hasAnyPermission(['Curriculum List']))
         <!-- School Admin -->
         <li class="nav-item">
             <a class="nav-link @if(Request::segment(2) != 'curriculum') collapsed @endif" data-bs-target="#curriculum-nav" data-bs-toggle="collapse" href="#">
@@ -726,21 +835,26 @@
                 <i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="curriculum-nav" class="nav-content collapse @if(Request::segment(2) == 'curriculum' ) show @endif" data-bs-parent="#sidebar-nav">
-
+                @if($authuser->hasAnyPermission(['Curriculum List']))
                 <li>
                     <a href="{{ route('master.curriculum.index') }}" class="@if(Request::segment(2) == 'curriculum' && Request::segment(3) == null) active @endif">
                     <i class="bi bi-circle"></i><span>{{ __("All Curricula")}}</span>
                     </a>
                 </li>
+                @endif
 
+                @if($authuser->hasAnyPermission(['Curriculum Crete']))
                 <li>
                     <a href="{{ route('master.curriculum.create') }}" class="@if(Request::segment(2) == 'curriculum' && Request::segment(3) == 'create') active @endif">
                     <i class="bi bi-circle"></i><span>{{ __("Add New Curriculum")}}</span>
                     </a>
                 </li>
+                @endif
             </ul>
         </li>
+        @endif
 
+        @if($authuser->hasAnyPermission(['Grade List']))
         <!-- School Admin -->
         <li class="nav-item">
             <a class="nav-link @if(Request::segment(2) != 'grade') collapsed @endif " href="{{ route('master.grade.index') }}" href="{{ route('master.grade.index') }}">
@@ -748,7 +862,9 @@
             <span>{{ __("Grades")}}</span>
             </a>
         </li>
+        @endif
 
+        @if($authuser->hasAnyPermission(['Subject List']))
         <!-- School Admin -->
         <li class="nav-item">
             <a class="nav-link @if(Request::segment(2) != 'subject') collapsed @endif " href="{{ route('master.subject.index') }}">
@@ -756,7 +872,9 @@
             <span>{{ __("Subject")}}</span>
             </a>
         </li>
+        @endif
 
+        @if($authuser->hasAnyPermission(['Subjecttype List']))
         <!-- School Admin -->
         <li class="nav-item">
             <a class="nav-link @if(Request::segment(2) != 'subjecttype') collapsed @endif " href="{{ route('master.subjecttype.index') }}">
@@ -764,8 +882,9 @@
             <span>{{ __("Subject Type")}}</span>
             </a>
         </li>
+        @endif
 
-        
+        @endif
     </ul>
 </aside>
 <!-- End Sidebar-->

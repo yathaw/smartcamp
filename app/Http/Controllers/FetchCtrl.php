@@ -13,6 +13,10 @@ use App\Models\Package;
 use App\Models\Batch;
 use App\Models\Subject;
 use App\Models\Teachersegment;
+use App\Models\Schedule;
+use App\Models\Grade;
+use App\Models\Student;
+use App\Models\Payment;
 
 
 class FetchCtrl extends Controller
@@ -206,4 +210,116 @@ class FetchCtrl extends Controller
 
         return $teachersegments;
     }
+
+    public function getSchedules_byperiodid(Request $request){
+        $periodid = $request->period_id;
+
+        $schedules = Schedule::with([
+                        'batch' => function($q1) use ($periodid){
+                                $q1->with(['section'=> function($q2) use($periodid){
+                                    $q2->where('period_id',$periodid);
+                                    $q2->get();
+                                }]);
+                                $q1->get();
+                            },
+                        'teachersegment' => function($q1){
+                                $q1->with(['curriculum'=> function($q2){
+                                    $q2->with('subject','subjecttype');
+                                }]);
+                                $q1->get();
+                            },
+                        'scheduletype'
+                    ])->get();
+        return $schedules;
+    }
+
+    public function getCurricula_bysectionid(Request $request){
+        $sectionid = $request->sectionid;
+        $section = Section::find($sectionid);
+
+        $gradeid = $section->grade_id;
+
+        $grade = Grade::with(['curricula'=>function($q) use($gradeid){
+                $q->with(['subject','subjecttype'])
+                ->where('type','=','Main')
+                ->get();
+            }])
+            ->whereHas('curricula',function($q) use($gradeid){
+                $q->where('grade_id',$gradeid);
+            })
+            ->where('id',$gradeid)
+            ->first();
+
+
+        $curricula = $grade->curricula;
+
+        $subjecttypes = $grade->subjecttypes->toArray();
+
+        $data = [$grade, $curricula, $subjecttypes];
+
+        return $data;
+
+    }
+
+    public function getPackage_bysectionid(Request $request){
+        $sectionid = $request->id;
+
+        $packages = Package::where('section_id',$sectionid)->get();
+
+        return $packages;
+    }
+
+    public function getAmount_bypackageid(Request $request){
+        $packageid = $request->id;
+
+        $package = Package::find($packageid);
+
+        return $package;
+    }
+
+    public function getStudentsegments_bybatchid(Request $request){
+        $batchid = $request->id;
+
+        $students = Student::with('studentsegments','user')->whereHas('studentsegments', function ($query) use ($batchid) {
+                    $query->where('studentsegments.batch_id', $batchid);
+                })->get();
+
+        return $students;
+    }
+
+    public function getPackage_bystudentid(Request $request){
+        $studentid = $request->id;
+        $sectionid = $request->sectionid;
+
+        $packages = Package::where('section_id',$sectionid)->get();
+
+
+        $studentpayment = Payment::where('student_id','=',$studentid)
+                        ->where('section_id','=',$sectionid)
+                        ->pluck('package_id');
+
+        $data = [$packages, $studentpayment];
+
+        return $data;
+
+    }
+
+    public function getPayment_bystudentid(Request $request){
+        $studentid = $request->id;
+        $packageid = $request->packageid;
+        $sectionid = $request->sectionid;
+
+
+        $data = Payment::with('package')
+                        ->where('student_id','=',$studentid)
+                        ->where('section_id','=',$sectionid)
+                        ->where('package_id','=',$packageid)
+                        ->first();
+
+
+        return $data;
+
+    }
+
+    
 }

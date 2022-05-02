@@ -13,9 +13,9 @@ class Plan extends Model
 
     protected $fillable=['name', 'amount', 'duration'];
 
-    public function users()
+    public function schools()
     {
-        return $this->belongsToMany('App\Models\User')->withTimestamps();
+        return $this->belongsToMany('App\Models\School')->withPivot('user_id','status')->withTimestamps();
     } 
     
 }

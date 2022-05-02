@@ -80,14 +80,14 @@
               	<div class="card info-card customers-card">
                   	<div class="card-body">
                       	<h5 class="card-title d-inline-block"> Enrollment </h5>
-                      	@if($section->price)
+                      	@if($studentsegments)
 
 	                      	<div class="d-flex align-items-center">
 							    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
 			                      	<i class="bi bi-people"></i>
 			                    </div>
 							    <div class="ps-3">
-							        <h6>3,264</h6>
+							        <h6>{{ $studentsegments }}</h6>
 							        <span class="text-muted small pt-2 ps-1"> Students </span>
 							    </div>
 							</div>
@@ -464,11 +464,12 @@
             <form class="new-added-form">
                 <input type="hidden" name="sectionid" id="inputsectionId" value="{{ $section->id }}">
                 <input type="hidden" name="id" id="inputteachersegmentId">
-
+                <input type="hidden" name="txtcolor" id="inputTxtcolorpicker">
+                <input type="hidden" name="bgcolor" id="inputBgcolorpicker">
 
                 <div class="modal-body">
                     <div class="row form-group mb-3">
-                        <div class="col-12 form-group">
+                        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12 form-group">
                             <label for="inputBatch" class="mb-2"> {{ __("Choose Batch") }} *</label>
                             <select class="select2 batch" name="batch" id="inputBatch">
                                 
@@ -476,6 +477,13 @@
 
                             <span class="err_batch error d-block text-danger"></span>
                         </div>
+
+                        <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12 form-group">
+                            <label for="inputDuration"> {{ __("Lecture Duration") }} *</label>
+                            <div id="inputDuration"></div>
+                            <span class="err_starttime error d-block text-danger"></span>
+                        </div>
+
                     </div>
 
 
@@ -504,6 +512,20 @@
 
                             <span class="err_teacher error d-block text-danger"></span>
 
+                        </div>
+                    </div>
+
+                    
+
+                    <div class="row">
+                    	<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12  form-group mb-3">
+                        	<label class="mb-2" for="inputColor">{{ __("Choose Text Color") }} * </label>
+                        	<div class='txt-color-picker'></div>
+                        </div>
+
+                        <div class="col-xl-6  col-lg-6 col-md-6 col-sm-12 col-12  form-group mb-3">
+                        	<label class="mb-2" for="inputColor">{{ __("Choose Background Color") }} * </label>
+                        	<div class='bg-color-picker'></div>
                         </div>
                     </div>
 
@@ -641,6 +663,64 @@
                 placeholder: placeholder_title,
                 dropdownParent: $("#assignteacherModal")
             });
+
+            $("#inputDuration").durationjs({
+                display:"hm",
+                initVal: 0
+
+            });
+
+            const txtpickr = Pickr.create({
+			    el: '.txt-color-picker',
+				useAsButton: false,
+			    showAlways: true,
+			    inline: true,
+			    outputPrecision: 0,
+			    position: 'bottom-middle',
+			    default: '#0A6C96',
+			    comparison: false,
+			    components: {
+			        hue: true,
+			        interaction: {
+			            hex: true,
+			            input: true,
+			        }
+			    }
+			});
+
+			txtpickr.on('change', (color, source, instance) => {
+			   	const hex = color.toHEXA();
+			    const hexcolor = '#' + hex[0] + hex[1] + hex[2];
+
+			    $('#inputTxtcolorpicker').val(hexcolor);
+
+			});
+
+			const bgpickr = Pickr.create({
+			    el: '.bg-color-picker',
+				useAsButton: false,
+			    showAlways: true,
+			    inline: true,
+			    outputPrecision: 0,
+			    position: 'bottom-middle',
+			    default: '#0A6C96',
+			    comparison: false,
+			    components: {
+			        hue: true,
+			        interaction: {
+			            hex: true,
+			            input: true,
+			        }
+			    }
+			});
+
+			bgpickr.on('change', (color, source, instance) => {
+			   	const hex = color.toHEXA();
+			    const hexcolor = '#' + hex[0] + hex[1] + hex[2];
+
+			    $('#inputBgcolorpicker').val(hexcolor);
+
+			});
 
         // Installment
             function getTotalinstallment(){
@@ -1100,20 +1180,21 @@
 	                        	var id = v.id;
 	                        	var codeno = v.codeno;
 	                        	var name = v.name;
-                        		var color = v.color;
+                        		var bgcolor = v.bgcolor;
+                        		var txtcolor = v.txtcolor;
 
 
 	                            html += `<div class="col-4">
-											<div class="card text-white mb-3" style="background-color:${color}">
-										    	<div class="card-body">
-										    		<h5 class="card-title text-white">${codeno}</h5>
+											<div class="card text-white mb-3" style="background-color:${bgcolor};">
+										    	<div class="card-body" style="color:${txtcolor}">
+										    		<h5 class="card-title" style="color:${txtcolor}">${codeno}</h5>
 											    	<p class="card-text">${name}</p>
 											  	</div>
 										    	<div class="card-footer bg-transparent d-grid gap-2 d-md-flex justify-content-md-end">
 										    		<a href="" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="${edit_toggle_text}">
 														<i class="bi bi-info-lg"></i>
 													</a>
-													<a href="javascript:void(0)" class="btn btn-warning btn-sm batch_editBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="${edit_toggle_text}" data-id="${id}" data-codeno="${codeno}" data-name="${v.name}" data-color="${v.color}">
+													<a href="javascript:void(0)" class="btn btn-warning btn-sm batch_editBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="${edit_toggle_text}" data-id="${id}" data-codeno="${codeno}" data-name="${v.name}" data-bgcolor="${v.bgcolor}" data-txtcolor="${txtcolor}">
 														<i class="bi bi-gear-fill"></i>
 													</a>
 													<a href="javascript:void(0)" class="btn btn-danger btn-sm batch_deleteBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="${remove_toggle_text}" data-id="${id}">
@@ -1441,7 +1522,7 @@
 										    </h2>
 										    <div id="collapse${id}" class="accordion-collapse collapse ${collapse_show}" aria-labelledby="heading${id}" data-bs-parent="#accordionExample">
 										        <div class="accordion-body">
-										            <ul class="list-group">
+										            <div class="row">
 										            `;
 
 
@@ -1455,33 +1536,42 @@
 									var subject_name = v1.curriculum.subject.name;
 									var subject_otherlanguage = v1.curriculum.subject.otherlanguage;
 
-                               		html += `
-		                                <li class="list-group-item "> 
-		                                	<div class="d-flex justify-content-between flex-wrap align-items-center">
-		                                		<div class="d-flex flex-wrap align-items-center">
-		                                			<div class="avatar me-3">
-		                                				<img src="${profile_url+teacher_profile}" class="rounded-circle"> 
-		                                			</div>
-		                                			<div class="d-flex flex-column">
-		                                				<span> ${teacher} </span>
-		                                				<span class="text-muted "> 
-		                                					${subject_name}
-										    				<small class="ps-3">( ${subject_otherlanguage} )</small>
-										    			</span>
-		                                			</div>
-		                                		</div>
-		                                		<div>
-		                                			<button type="button" class="btn btn-outline-danger btn-sm float-end assignteacher_deleteBtn" data-id="${id}"> 
-			                                            <i class="bi bi-x-lg"></i> ${remove_toggle_text} 
-			                                        </button>
-		                                		</div>
-											</div>		
-										    
-		                                </li>`;
+									var duration = v1.duration;
+									var bgcolor = v1.bgcolor;
+									var txtcolor = v1.txtcolor;
+
+		                            html += `<div class="col-12">
+
+												<div class="card text-white mb-3" style="background-color:${bgcolor};" >
+											    	<div class="card-body">
+											    		<div class="d-flex justify-content-between flex-wrap align-items-center pt-2">
+					                                		<div class="d-flex flex-wrap align-items-center">
+					                                			<div class="avatar me-3">
+					                                				<img src="${profile_url+teacher_profile}" class="rounded-circle"> 
+					                                			</div>
+					                                			<div class="d-flex flex-column" style="color:${txtcolor}">
+					                                				<span> ${teacher} </span>
+					                                				<span > 
+					                                					${subject_name}
+													    				<small class="ps-3">( ${subject_otherlanguage} )</small>
+													    			</span>
+					                                				<span> Duration : ${duration} </span>
+
+					                                			</div>
+					                                		</div>
+					                                		<div>
+																<a href="javascript:void(0)" class="btn btn-danger btn-sm assignteacher_deleteBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="${remove_toggle_text}" data-id="${id}">
+																	<i class="bi bi-x-lg"></i> Remove
+																</a>
+					                                		</div>
+														</div>
+												  	</div>
+												</div>
+											</div>`;
 
 		                        })
 		                                            
-		                        html += `</ul>
+		                        html += `</div>
 									    </div>
 										</div>
 									   	</div>`;

@@ -158,27 +158,38 @@ class LoginCtrl extends Controller
 
                     Auth::attempt($credentials);
 
-                    return \Redirect::route('procedure');
+                    // return \Redirect::route('procedure');
 
 
                     if ($role[0] == 'Software Admin') {
-                        return \Redirect::route('controlpanel');                        
+                        return \Redirect::route('master.school.index');                        
                     }
                     else{
-                        $user_staff_status = $user->staff->status;
 
-                        // dd($user_staff_status);
+                        $authuser = Auth::user();
+                        $authuser_id = Auth::id();
+                        $role = $authuser->getRoleNames();
 
-                        if ($user_staff_status == "Active") {
-                            return \Redirect::route('master.department.index');
-                        }
-                        else if($user_staff_status == "Ongoing"){
-                            return \Redirect::route('procedure');
+                        if(in_array($role[0],["School Admin", "Principal"])){
+                            $user_staff_status = $user->staff->status;
+
+                            // dd($user_staff_status);
+
+                            if ($user_staff_status == "Active") {
+                                return \Redirect::route('master.school.index');
+                            }
+                            else if($user_staff_status == "Ongoing"){
+                                return \Redirect::route('procedure');
+                            }else{
+                                return redirect()->back()
+                                ->with('errmsg', $authcustomMessages['loginFailure'])
+                                ->with('type', 'loginFailure');
+                            }
                         }else{
-                            return redirect()->back()
-                            ->with('errmsg', $authcustomMessages['loginFailure'])
-                            ->with('type', 'loginFailure');
+                            return \Redirect::route('master.school.index');
                         }
+
+                        
                     }
 
                     

@@ -26,23 +26,40 @@ class SyllabusCtrl extends Controller
         $authuser_id = Auth::id();
         $role = $authuser->getRoleNames();
 
-        $school = School::find($authuser->school_id);
-        $gradeids = [];
-        foreach ($school->grades as $grade) {
-            array_push($gradeids, $grade->id);
-        }
+            $school = School::find($authuser->school_id);
+            $gradeids = [];
 
-        $schoolid = $school->id;
+            if($role[0] == "Guardian"){
+                foreach($authuser->guardian->students as $key => $student){
+                    foreach($student->studentsegments as $key => $studentsegment){
+                        array_push($gradeids, $studentsegment->batch->section->grade->id);
+                    }
+                }
+            }else if($role[0] == "Student"){
+                foreach($authuser->student->studentsegments as $key => $studentsegment){
+                    array_push($gradeids, $studentsegment->batch->section->grade->id);
+                }
+            }
+            else{
+                
+                foreach ($school->grades as $grade) {
+                    array_push($gradeids, $grade->id);
+                }
 
-        $grades = Grade::whereHas('curricula', function($q) use ($schoolid)
-        {
-            $q->whereHas('syllabus', function($q1) use ($schoolid)
+                
+            }
+            $schoolid = $school->id;
+
+
+            $grades = Grade::whereHas('curricula', function($q) use ($schoolid)
             {
-                $q1->where('school_id', '=', $schoolid);
-            });
-        })
-        ->whereIn('id',$gradeids)
-        ->get();
+                $q->whereHas('syllabus', function($q1) use ($schoolid)
+                {
+                    $q1->where('school_id', '=', $schoolid);
+                });
+            })
+            ->whereIn('id',$gradeids)
+            ->get();
 
         $subjecttypeids = array();
         foreach ($grades as $grade) {
@@ -231,6 +248,18 @@ class SyllabusCtrl extends Controller
 
         return redirect()->back()->with('successmsg', $customMessages['successmsg']);
 
+
+    }
+
+    public function show($id)
+    {
+        $hashids = new Hashids('', 10);
+        $syllabusid = $hashids->decode($id);
+
+        $syllabi = Syllabus::find($syllabusid[0]);
+
+        // dd($syllabi);
+        return view('backend.syllabuspdf',compact('syllabi'));
 
     }
 

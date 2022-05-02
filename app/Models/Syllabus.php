@@ -40,8 +40,5 @@ class Syllabus extends Model
                     ->withPivot('id');
     }
 
-    public function examdetail()
-    {
-        return $this->hasOne('App\Models\Examdetail');
-    }
+    
 }

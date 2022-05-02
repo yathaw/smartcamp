@@ -76,6 +76,12 @@ class TeachersegmentCtrl extends Controller
         $userid = $request->teacher;
         $sectionid = $request->sectionid;
 
+        $hour = $request->hour;
+        $second = $request->second;
+        $duration = $hour.":".$second.":00";
+        $txtcolor = $request->txtcolor;
+        $bgcolor = $request->bgcolor;
+
         $section = Section::find($sectionid);
 
         $curriculum = Curriculum::where('grade_id', $section->grade_id)
@@ -92,6 +98,11 @@ class TeachersegmentCtrl extends Controller
         $teachersegment->school_id = $authuser->school_id;
         $teachersegment->user_id = $authuser_id;
         $teachersegment->staff_id = $staffid;
+        $teachersegment->duration = $duration;
+        $teachersegment->txtcolor = $txtcolor;
+        $teachersegment->bgcolor = $bgcolor;
+
+
         $teachersegment->save();
 
         return response()->json(['success'=>'Teachersegment <b> SAVED </b> successfully.']);

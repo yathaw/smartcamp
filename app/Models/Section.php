@@ -57,4 +57,9 @@ class Section extends Model
     {
         return $this->hasOne('App\Models\Teachersegment');
     }
+
+    public function exams()
+    {
+        return $this->hasMany('App\Models\Exam');
+    }
 }

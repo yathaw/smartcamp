@@ -37,4 +37,13 @@ class Curriculum extends Model
     {
         return $this->hasOne('App\Models\Teachersegment');
     }
+    public function examdetail()
+    {
+        return $this->hasOne('App\Models\Examdetail');
+    }
+
+    public function lesson()
+    {
+        return $this->hasOne('App\Models\Lesson');
+    }
 }

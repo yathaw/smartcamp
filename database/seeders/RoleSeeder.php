@@ -50,7 +50,7 @@ class RoleSeeder extends Seeder
         ]);
 
         DB::table('roles')->insert([
-            'name'      => 'Student',
+            'name'      => 'Teacher',
             'guard_name' => 'web',
             'created_at' => now(),
             'updated_at' => now()

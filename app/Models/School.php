@@ -11,7 +11,7 @@ class School extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['name', 'logo', 'coverphoto', 'certificate', 'about', 'mottoes', 'established', 'facilities', 'address', 'studentamount', 'city_id', 'schooltype_id', 'socaillink'];
+    protected $fillable=['codeno', 'name', 'logo', 'coverphoto', 'certificate', 'about', 'mottoes', 'established', 'facilities', 'address', 'studentamount', 'city_id', 'schooltype_id', 'socaillink'];
 
     public function city()
     {
@@ -129,5 +129,32 @@ class School extends Model
     public function holiday()
     {
         return $this->hasOne('App\Models\Holiday');
+    }
+
+    public function expenses()
+    {
+        return $this->hasMany('App\Models\Expense');
+    }
+
+    public function plans()
+    {
+        return $this->belongsToMany('App\Models\Plan')
+                    ->withPivot('user_id','status')
+                    ->withTimestamps();
+    }
+
+    public function transfers()
+    {
+        return $this->hasMany('App\Models\Transfer');
+    }
+
+    public function lessons()
+    {
+        return $this->hasMany('App\Models\Lesson');
+    }
+
+    public function recordings()
+    {
+        return $this->hasMany('App\Models\Recording');
     }
 }

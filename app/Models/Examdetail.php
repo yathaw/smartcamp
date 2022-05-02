@@ -11,16 +11,16 @@ class Examdetail extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['starttime', 'endtime', 'exam_id', 'syllabus_id', 'school_id', 'user_id'];
+    protected $fillable=['date','starttime', 'endtime', 'curriculum_id', 'exam_id', 'school_id', 'user_id'];
 
     public function exam()
     {
         return $this->belongsTo('App\Models\Exam');
     }
 
-    public function syllabus()
+    public function curriculum()
     {
-        return $this->belongsTo('App\Models\Syllabus');
+        return $this->belongsTo('App\Models\Curriculum');
     }
 
     public function school()
@@ -37,4 +37,6 @@ class Examdetail extends Model
     {
         return $this->hasMany('App\Models\Result');
     }
+
+    
 }

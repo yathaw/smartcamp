@@ -28,4 +28,10 @@ class Studentsegment extends Model
         return $this->belongsToMany('App\Models\Syllabus')
                     ->withPivot('id');
     }
+
+    public function batchSection()
+    {
+        return $this->hasOneThrough(Batch::class, Section::class);
+    }
+
 }

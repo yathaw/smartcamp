@@ -37,7 +37,18 @@ use App\Http\Controllers\TeachersegmentCtrl;
 use App\Http\Controllers\ScheduleCtrl;
 use App\Http\Controllers\ScheduletypeCtrl;
 use App\Http\Controllers\HolidayCtrl;
+use App\Http\Controllers\StudentCtrl;
+use App\Http\Controllers\ExamCtrl;
+use App\Http\Controllers\AttendanceCtrl;
+use App\Http\Controllers\ExpenseCtrl;
+use App\Http\Controllers\ResultCtrl;
+use App\Http\Controllers\ReportCtrl;
+use App\Http\Controllers\SchoolCtrl;
+use App\Http\Controllers\ProfileCtrl;
+use App\Http\Controllers\DashboardCtrl;
 
+use App\Http\Controllers\LessonCtrl;
+use App\Http\Controllers\RecordCtrl;
 
 
 /*
@@ -83,7 +94,57 @@ Route::get('lang/{locale}',[LocalizationCtrl::class, 'index'])->name('lang');
 
 // Backend Route
 
+Route::get('controlpanel',[DashboardCtrl::class,'index'])->name('controlpanel');
 Route::group(['prefix' => 'master', 'as' => 'master.'], function(){
+    
+    // Lesson
+    Route::resource('/lesson', LessonCtrl::class);
+
+    // Recording
+    Route::resource('/recording', RecordCtrl::class);
+    
+    // profile
+    Route::resource('profile', ProfileCtrl::class);
+    Route::post('updateprofile',[ProfileCtrl::class, 'updateprofile'])->name('updateprofile');
+    Route::post('changepassword',[ProfileCtrl::class, 'changepassword'])->name('changepassword');
+
+    // school
+    Route::resource('/school', SchoolCtrl::class);
+
+    // Report
+    Route::resource('report',ReportCtrl::class);
+
+    // Result
+    Route::resource('/result',ResultCtrl::class);
+    Route::post('/result/update/{id}',[ResultCtrl::class, 'update'])->name('result.update');
+
+    // Expense 
+    Route::resource('/expense',ExpenseCtrl::class);
+
+
+    // Attendance
+    Route::resource('/attendance',AttendanceCtrl::class);
+
+
+    // Exam
+    Route::resource('/exam',ExamCtrl::class);
+    Route::post('/exam/update/{id}',[ExamCtrl::class, 'update'])->name('exam.update');
+    Route::post('/examdetail/update/{id}',[ExamCtrl::class, 'examdetailupdate'])->name('examdetail.update');
+    Route::delete('/examdetail/destroy/{id}',[ExamCtrl::class, 'examdetaildestroy'])->name('examdetail.destroy');
+
+
+    // Student
+    Route::resource('/student',StudentCtrl::class);
+    Route::get('/getlistStudent/{id}',[StudentCtrl::class, 'getlistData'])->name('getlistStudent');
+    Route::get('/admission',[StudentCtrl::class, 'admissionForm'])->name('admission');
+    Route::post('/admission',[StudentCtrl::class, 'admissionStore'])->name('admission');
+    Route::get('/installment',[StudentCtrl::class, 'installmentForm'])->name('installment');
+    Route::post('/installment',[StudentCtrl::class, 'installmentStore'])->name('installment');
+    Route::post('/pwreset',[StudentCtrl::class, 'passwordreset'])->name('pwreset');
+
+    Route::get('/transfer',[StudentCtrl::class, 'transferForm'])->name('transfer');
+    Route::post('/transfer',[StudentCtrl::class, 'transferStore'])->name('transfer');
+
 
     // Schedule 
     Route::resource('/schedule',ScheduleCtrl::class);
@@ -200,6 +261,10 @@ Route::group(['prefix' => 'master', 'as' => 'master.'], function(){
     Route::resource('/plan', PlanCtrl::class);
     Route::get('/getlistPlans',[PlanCtrl::class, 'getlistData'])->name('getlistPlans');
     Route::post('/plan/update/{id}',[PlanCtrl::class, 'update'])->name('plan.update');
+    Route::get('/plan/change/{id}',[PlanCtrl::class, 'changeForm'])->name('plan.change');
+    Route::post('/plan/change/{id}',[PlanCtrl::class, 'changePlan'])->name('plan.change');
+    Route::get('/getlistPlanhistory',[PlanCtrl::class, 'getlistPlanhistory'])->name('getlistPlanhistory');
+    
 
     Route::resource('/role', RoleCtrl::class);
     Route::get('/getlistRoles',[RoleCtrl::class, 'getlistData'])->name('getlistRoles');
@@ -227,4 +292,19 @@ Route::post('getSection', [FetchCtrl::class, 'getSection'])->name('getSection');
 Route::post('/getSection_byperiodid',[FetchCtrl::class, 'getSection_byperiodid'])->name('getSection_byperiodid');
 Route::post('/getSubjects_bybatchid',[FetchCtrl::class, 'getSubjects_bybatchid'])->name('getSubjects_bybatchid');
 Route::post('/getTeachersegments_bybatchid',[FetchCtrl::class, 'getTeachersegments_bybatchid'])->name('getTeachersegments_bybatchid');
+Route::post('/getStudentsegments_bybatchid',[FetchCtrl::class, 'getStudentsegments_bybatchid'])->name('getStudentsegments_bybatchid');
+
+Route::post('/getPackage_bysectionid',[FetchCtrl::class, 'getPackage_bysectionid'])->name('getPackage_bysectionid');
+Route::post('/getAmount_bypackageid',[FetchCtrl::class, 'getAmount_bypackageid'])->name('getAmount_bypackageid');
+
+Route::post('/getPackage_bystudentid',[FetchCtrl::class, 'getPackage_bystudentid'])->name('getPackage_bystudentid');
+Route::post('/getPayment_bystudentid',[FetchCtrl::class, 'getPayment_bystudentid'])->name('getPayment_bystudentid');
+
+
+
+Route::post('/getSchedules_byperiodid',[FetchCtrl::class, 'getSchedules_byperiodid'])->name('getSchedules_byperiodid');
+Route::post('getCurricula_bysectionid', [FetchCtrl::class, 'getCurricula_bysectionid'])->name('getCurricula_bysectionid');
+
+Route::get('/prnpriview',[StudentCtrl::class, 'prnpriview'])->name('prnpriview');
+
 

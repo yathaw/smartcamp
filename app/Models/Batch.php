@@ -11,7 +11,12 @@ class Batch extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['codeno', 'name', 'color', 'section_id', 'user_id', 'school_id'];
+    protected $fillable=['codeno', 'name', 'bgcolor', 'txtcolor', 'subjecttype_id', 'section_id', 'user_id', 'school_id'];
+
+    public function subjecttype()
+    {
+        return $this->belongsTo('App\Models\Subjecttype');
+    }
 
     public function section()
     {
@@ -52,5 +57,23 @@ class Batch extends Model
     public function teachersegment()
     {
         return $this->hasMany('App\Models\Teachersegment');
+    }
+
+    public function gradebatch()
+    {
+        return $this->hasOneThrough(
+            Section::class,
+            Grade::class
+        );
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany('App\Models\Attendance');
+    }
+
+    public function recordings()
+    {
+        return $this->hasMany('App\Models\Recording');
     }
 }

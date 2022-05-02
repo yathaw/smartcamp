@@ -54,6 +54,25 @@
 	font-family: 'montserrat';
 	src:url('../fonts/montserrat/Montserrat-VariableFont_wght.ttf');
 }
+@font-face{
+	font-family: 'NotoSansMyanmar-Regular';
+	src:url('../fonts/myanmarfont/NotoSansMyanmar-Regular.ttf');
+}
+
+@font-face{
+	font-family: 'NotoSansMyanmar-Bold';
+	src:url('../fonts/myanmarfont/NotoSansMyanmar-Bold.ttf');
+}
+
+@font-face{
+	font-family: 'NotoSerifMyanmar-Regular';
+	src:url('../fonts/myanmarfont/NotoSerifMyanmar-Regular.ttf');
+}
+
+@font-face{
+	font-family: 'NotoSerifMyanmar-Bold';
+	src:url('../fonts/myanmarfont/NotoSerifMyanmar-Bold.ttf');
+}
 
 .lato_bold{
 	font-family: lato_bold;
@@ -70,6 +89,11 @@
 .lato_black{
 	font-family: lato_black;
 }
+
+.lato_regular{
+	font-family: lato_regular;
+}
+
 
 .logo_font{
 	font-family: coco_gothic;

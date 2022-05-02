@@ -2,7 +2,7 @@
 	@php
         $authuser = Auth::user();
         $hashids = new Hashids\Hashids('', 10);
-
+        $authRole = Auth::user()->getRoleNames()[0];
     @endphp
 
 	<div class="pagetitle">
@@ -83,23 +83,27 @@
 			                                                                    <div class="center">
 			                                                                        <h1> {{ $subject }} <br><span class="text-success fw-bold"> {{ $type }}</span></h1>
 			                                                                        <ul>
+			                                                                        	@if(!in_array($authRole,["Guardian","Student"]))
 			                                                                            <li>
 			                                                                                <a href="javascript:void(0)" class="editBtn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('Edit') }}" data-id="{{ $syllabus->id }}" >
 			                                                                                	<i class="bi bi-gear-fill text-white"></i> 
 			                                                                                </a>
 			                                                                            </li>
+			                                                                            @endif
 
 			                                                                            <li>
 			                                                                                <a href="{{ route('master.syllabus.show', $syllabi_id) }}" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('Display PDF') }}" >
 			                                                                                	<i class='bx bxs-file-pdf text-white'></i>
 			                                                                                </a>
 			                                                                            </li>
-
+			                                                                            @if(!in_array($authRole,["Guardian","Student"]))
 			                                                                            <li>
 			                                                                                <a href="javascript:void(0)" class="deleteBtn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('Remove') }}"  data-id="{{ $syllabus->id }}">
 			                                                                                	<i class="bi bi-x-lg text-white"></i> 
 			                                                                                </a>
 			                                                                            </li>
+
+			                                                                            @endif
 			                                                                            
 			                                                                        </ul>
 			                                                                    </div>
@@ -130,12 +134,13 @@
 			                                                        <div class="center">
 			                                                            <h1> {{ $subject }} <br><span class="text-success fw-bold"> {{ $type }}</span></h1>
 			                                                            <ul>
+			                                                            	@if(!in_array($authRole,["Guardian","Student"]))
 			                                                                <li>
 			                                                                    <a href="{{ route('master.syllabus.edit', $syllabi_id) }}" class="editBtn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('Edit') }}"  data-id="{{ $syllabus->id }}">
 			                                                                    	<i class="bi bi-gear-fill text-white"></i> 
 			                                                                    </a>
 			                                                                </li>
-
+			                                                                @endif
 			                                                                <li>
 			                                                                    <a href="{{ route('master.syllabus.show', $syllabi_id) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('Display PDF') }}"  target="_blank">
 			                                                                    	<i class='bx bxs-file-pdf text-white'></i>
@@ -143,12 +148,14 @@
 			                                                                    </a>
 			                                                                </li>
 
+			                                                                @if(!in_array($authRole,["Guardian","Student"]))
 			                                                                <li>
 			                                                                    <a href="javascript:void(0)" class="deleteBtn" data-id="{{ $syllabus->id }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('Remove') }}" >
 			                                                                    	<i class="bi bi-x-lg text-white"></i> 
 			                                                                    </a>
 			                                                                </li>
-			                                                                
+			                                                                @endif
+
 			                                                            </ul>
 			                                                        </div>
 			                                                    </div>

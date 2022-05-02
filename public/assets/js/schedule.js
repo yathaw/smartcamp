@@ -26,36 +26,23 @@ $("td[data-date]").droppable({
 });
 
 // show EDIT and TRASH tools
-$(".drag").hover(
-  function () {
-    var isAdmin = 1; // Ability to hide or show edit and delete options
-    if (isAdmin == 1) {
-      $(this)
-        .css('z-index', '999')
-        .prepend('<div class="opt-tools"><div class="opt-edit"><i class="fas fa-pen"></i></div><div class="opt-trash"><i class="fas fa-trash"></i></div></div>');
-    }
-  },
-  function () {
-    //When mouse hovers out DIV remove tools
-    $(this).css("z-index", "0").find(".opt-tools").remove();
-  }
-);
 
-// Show modal to edit task
-$(document).on('click', '.opt-edit', function() {
-  // Get task ID and DATE from DATA attribute
-  var taskid = $(this).parent().parent().data('taskid'),
-      userid = $(this).parent().parent().data('userid');
-  // Get DATE 
-  var date = $(this).closest('td').data('date');
-  // insert data to Modal 
-  $('#ktxt')[0].jscolor.fromString('FFFFFF');
-  $('#kbg')[0].jscolor.fromString('8E8E8E');
-  $('#demotaak2').css('color', '#FFFFFF');
-  $('#demotaak1').css('border-left-color', '#8E8E8E');
-  $('#demotaak2').css('background-color', '#8E8E8E');
-  $('#edittask').modal('show');
-});
+
+// // Show modal to edit task
+// $(document).on('click', '.opt-edit', function() {
+//   // Get task ID and DATE from DATA attribute
+//   var taskid = $(this).parent().parent().data('taskid'),
+//       userid = $(this).parent().parent().data('userid');
+//   // Get DATE 
+//   var date = $(this).closest('td').data('date');
+//   // insert data to Modal 
+//   $('#ktxt')[0].jscolor.fromString('FFFFFF');
+//   $('#kbg')[0].jscolor.fromString('8E8E8E');
+//   $('#demotaak2').css('color', '#FFFFFF');
+//   $('#demotaak1').css('border-left-color', '#8E8E8E');
+//   $('#demotaak2').css('background-color', '#8E8E8E');
+//   $('#edittask').modal('show');
+// });
 
 // Modal remove task ?
 $(document).on('click', '.opt-trash', function() {
@@ -73,6 +60,7 @@ $(document).on('click', '#confdelete', function() {
   $('#deletetask').modal('hide');
 });
 
+
 function changeColor(id, c) {
     if (id == 'ctxt') {
         $('#demotaak2').css('color', '#' + c);
@@ -82,3 +70,4 @@ function changeColor(id, c) {
     } 
     return false;
 } 
+

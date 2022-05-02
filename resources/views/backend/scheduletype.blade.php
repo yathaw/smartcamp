@@ -85,7 +85,8 @@
 	            <form class="row g-3">
 	            	<input type="hidden" name="id" id="inputId">
                     <input type="hidden" name="oldimage" id="oldimage">
-
+                    <input type="hidden" name="txtcolor" id="inputTxtcolorpicker">
+                    <input type="hidden" name="bgcolor" id="inputBgcolorpicker">
 
 		            <div class="modal-body">
 					    <div class="col-12 mb-3">
@@ -95,6 +96,18 @@
                             <span class="err_name error d-block text-danger"></span>
 
 					    </div>
+
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12  form-group mb-3">
+                                <label class="mb-2" for="inputColor">{{ __("Choose Text Color") }} * </label>
+                                <div class='txt-color-picker'></div>
+                            </div>
+
+                            <div class="col-xl-6  col-lg-6 col-md-6 col-sm-12 col-12  form-group mb-3">
+                                <label class="mb-2" for="inputColor">{{ __("Choose Background Color") }} * </label>
+                                <div class='bg-color-picker'></div>
+                            </div>
+                        </div>
 
 		            </div>
 		            <div class="modal-footer">
@@ -369,6 +382,59 @@
                 $("#showModal").modal("show");
                 $("form").attr('id', 'addForm');
                 $(".modal-title").text(n_modal_title);
+
+                const txtpickr = Pickr.create({
+                    el: '.txt-color-picker',
+                    useAsButton: false,
+                    showAlways: true,
+                    inline: true,
+                    outputPrecision: 0,
+                    position: 'bottom-middle',
+                    default: '#0A6C96',
+                    comparison: false,
+                    components: {
+                        hue: true,
+                        interaction: {
+                            hex: true,
+                            input: true,
+                        }
+                    }
+                });
+
+                txtpickr.on('change', (color, source, instance) => {
+                    const hex = color.toHEXA();
+                    const hexcolor = '#' + hex[0] + hex[1] + hex[2];
+
+                    $('#inputTxtcolorpicker').val(hexcolor);
+
+                });
+
+                const bgpickr = Pickr.create({
+                    el: '.bg-color-picker',
+                    useAsButton: false,
+                    showAlways: true,
+                    inline: true,
+                    outputPrecision: 0,
+                    position: 'bottom-middle',
+                    default: '#0A6C96',
+                    comparison: false,
+                    components: {
+                        hue: true,
+                        interaction: {
+                            hex: true,
+                            input: true,
+                        }
+                    }
+                });
+
+                bgpickr.on('change', (color, source, instance) => {
+                    const hex = color.toHEXA();
+                    const hexcolor = '#' + hex[0] + hex[1] + hex[2];
+
+                    $('#inputBgcolorpicker').val(hexcolor);
+
+                });
+
             });
 
             // CREATE
@@ -439,13 +505,75 @@
 
                 var id = $(this).data('id');
                 var name = $(this).data('name');
+                var txtcolor = $(this).data('txtcolor');
+                var bgcolor = $(this).data('bgcolor');
+
+                
+
 
                 $('#inputId').val(id);
                 $('#inputName').val(name);
+                $('#inputTxtcolorpicker').val(txtcolor);
+                $('#inputBgcolorpicker').val(bgcolor);
+
 
 				$("#showModal").modal("show");
                 $("form").attr('id', 'editForm');
                 $(".modal-title").text(e_modal_title);
+
+                const txtpickr = Pickr.create({
+                    el: '.txt-color-picker',
+                    useAsButton: false,
+                    showAlways: true,
+                    inline: true,
+                    outputPrecision: 0,
+                    position: 'bottom-middle',
+                    default: txtcolor,
+                    comparison: false,
+                    components: {
+                        hue: true,
+                        interaction: {
+                            hex: true,
+                            input: true,
+                        }
+                    }
+                });
+
+                txtpickr.on('change', (color, source, instance) => {
+                    const hex = color.toHEXA();
+                    const hexcolor = '#' + hex[0] + hex[1] + hex[2];
+
+                    $('#inputTxtcolorpicker').val(hexcolor);
+
+                });
+
+                const bgpickr = Pickr.create({
+                    el: '.bg-color-picker',
+                    useAsButton: false,
+                    showAlways: true,
+                    inline: true,
+                    outputPrecision: 0,
+                    position: 'bottom-middle',
+                    default: bgcolor,
+                    comparison: false,
+                    components: {
+                        hue: true,
+                        interaction: {
+                            hex: true,
+                            input: true,
+                        }
+                    }
+                });
+
+                bgpickr.on('change', (color, source, instance) => {
+                    const hex = color.toHEXA();
+                    const hexcolor = '#' + hex[0] + hex[1] + hex[2];
+
+                    $('#inputBgcolorpicker').val(hexcolor);
+
+                });
+                
+
             });
 
             // UPDATE

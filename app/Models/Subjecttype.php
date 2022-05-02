@@ -11,7 +11,7 @@ class Subjecttype extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['name', 'otherlanguage', 'school_id'];
+    protected $fillable=['name', 'bgcolor', 'txtcolor', 'otherlanguage', 'school_id'];
 
     public function curricula()
     {
@@ -21,5 +21,10 @@ class Subjecttype extends Model
     public function grades()
     {
         return $this->belongsToMany('App\Models\Grade', 'curricula');
+    }
+
+    public function batch()
+    {
+        return $this->hasOne('App\Models\Batch');
     }
 }

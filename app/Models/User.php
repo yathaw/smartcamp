@@ -76,6 +76,11 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Staff');
     }
 
+    public function student()
+    {
+        return $this->hasOne('App\Models\Student');
+    }
+
     public function subjects()
     {
         return $this->belongsToMany('App\Models\Subject')
@@ -142,12 +147,7 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\Softwareanalytic');
     }
-    public function plans()
-    {
-        return $this->belongsToMany('App\Models\Plan')
-                    ->withTimestamps();
-    }
-    
+
     public function scheduletype()
     {
         return $this->hasOne('App\Models\Scheduletype');
@@ -156,5 +156,15 @@ class User extends Authenticatable
     public function holiday()
     {
         return $this->hasOne('App\Models\Holiday');
+    }
+
+    public function lesson()
+    {
+        return $this->hasOne('App\Models\Lesson');
+    }
+
+    public function recording()
+    {
+        return $this->hasOne('App\Models\Recording');
     }
 }

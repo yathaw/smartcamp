@@ -932,7 +932,7 @@ td{
 .profile .profile-overview .card-title {
   color: #012970;
 }
-.profile .profile-overview .label {
+.profile .profile-overview .label, .label {
   font-weight: 600;
   color: rgba(1, 41, 112, 0.6);
 }
@@ -1882,3 +1882,560 @@ ul#sortable li:hover {
   color: #ff771d;
   background: #ffecdf;
 }
+
+.empty {
+  height: 300px;
+  color: #d8d8d8;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.empty__text {
+  text-align: center;
+}
+
+.imgPreview__thumb, .box {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 300px;
+  margin-bottom: 20px;
+}
+.imgPreview__thumb--noimage {
+  border: 2px dashed #d8d8d8;
+  background-color: #f1f1f1;
+  background-image: none;
+}
+.hidden {
+  display: none;
+}
+
+/*------------------------------------------------*/
+/* buttons
+/*------------------------------------------------*/
+
+
+.btnUpload {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 0;
+  background-color: #6565EE;
+  color: #fff;
+}
+.btnUpload:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #6565EE;
+}
+.btnUpload i {
+  display: block;
+  text-align: center;
+  /*padding: 12px 0;*/
+  font-size: 1.5rem;
+}
+
+.btnAddImg {
+  background-color: #6565EE;
+  color: #fff;
+  background-color: #6565EE;
+  color: #6565EE;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  text-align: center;
+}
+.btnAddImg__icon {
+  font-size: 2rem;
+}
+.btnAddImg__text {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+
+.box{
+      border: 2px dashed #d8d8d8;
+    background-color: #f1f1f1;
+    background-image: none;
+}
+
+.upload-options {
+    position: absolute;
+    height: 50px;
+    background-color: #6565EE;
+    cursor: pointer;
+    overflow: hidden;
+    text-align: center;
+    transition: background-color ease-in-out 150ms;
+    width: 50px;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 0;
+    border-radius: 0.25rem;
+}
+.upload-options:hover {
+  background-color: #fff;
+  color: #6565EE !important;
+
+}
+.upload-options input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+.upload-options label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  overflow: hidden;
+}
+.upload-options label::after {
+  content: "\f219";
+  font-family: "bootstrap-icons";
+  position: relative;
+  font-size: 1.5rem;
+  color: #fff;
+  top: calc(50% - 1.6rem);
+  left: calc(50% - 0.85rem);
+  z-index: 0;
+}
+.upload-options label span {
+  display: inline-block;
+  width: 50%;
+  height: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
+  text-align: center;
+}
+.upload-options:hover label:after {
+  color: #6565EE !important;
+
+}
+
+.js--image-preview {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-image: url("");
+  background-color: white;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.js--image-preview::after {
+  content: "photo_size_select_actual";
+  font-family: "Material Icons";
+  position: relative;
+  font-size: 4.5em;
+  color: #e6e6e6;
+  top: calc(50% - 3rem);
+  left: calc(50% - 2.25rem);
+  z-index: 0;
+}
+.js--image-preview.js--no-default::after {
+  display: none;
+}
+.js--image-preview:nth-child(2) {
+  background-image: url("http://bastianandre.at/giphy.gif");
+}
+
+i.material-icons {
+  transition: color 100ms ease-in-out;
+  font-size: 2.25em;
+  line-height: 55px;
+  color: white;
+  display: block;
+}
+
+.drop {
+  display: block;
+  position: absolute;
+  background: rgba(95, 158, 160, 0.2);
+  border-radius: 100%;
+  transform: scale(0);
+}
+
+.animate {
+  -webkit-animation: ripple 0.4s linear;
+          animation: ripple 0.4s linear;
+}
+
+@-webkit-keyframes ripple {
+  100% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+}
+
+@keyframes ripple {
+  100% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+}
+
+#dailyattendanceDiv .option{
+  background: #fff;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 0 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0 10px;
+  border: 2px solid lightgrey;
+  transition: all 0.3s ease;
+}
+#dailyattendanceDiv .option .dot{
+  height: 10px;
+  width: 10px;
+  background: #d9d9d9;
+  border-radius: 50%;
+  position: relative;
+}
+#dailyattendanceDiv .option .dot::before{
+  position: absolute;
+  content: "";
+    top: 2px;
+    left: 2px;
+    width: 6px;
+    height: 6px;
+  background: #0069d9;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(1.5);
+  transition: all 0.3s ease;
+}
+#dailyattendanceDiv input[type="radio"]{
+  display: none;
+}
+#dailyattendanceDiv #option-1:checked:checked ~ .option-1,
+#dailyattendanceDiv #option-2:checked:checked ~ .option-2{
+  border-color: #0069d9;
+  background: #0069d9;
+}
+#dailyattendanceDiv #option-1:checked:checked ~ .option-1 .dot,
+#dailyattendanceDiv #option-2:checked:checked ~ .option-2 .dot{
+  background: #fff;
+}
+#dailyattendanceDiv #option-1:checked:checked ~ .option-1 .dot::before,
+#dailyattendanceDiv #option-2:checked:checked ~ .option-2 .dot::before{
+  opacity: 1;
+  transform: scale(1);
+}
+#dailyattendanceDiv .option span{
+  /*font-size: 20px;*/
+  color: #808080;
+  margin-left: 5px;
+
+}
+#dailyattendanceDiv #option-1:checked:checked ~ .option-1 span,
+#dailyattendanceDiv #option-2:checked:checked ~ .option-2 span{
+  color: #fff;
+}
+
+blockquote.reason:before{
+  content: "\F6B0";
+  font-family: 'bootstrap-icons';
+      font-size: 20px;
+} 
+
+
+#studentattendanceDiv .sticky-header {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fdfdfd;
+  z-index: 7;
+  position: sticky;
+  top: 0;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+#studentattendanceDiv .sticky-header span {
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: 0.4s;
+}
+
+#studentattendanceDiv .reveal .sticky-header span {
+  opacity: 1;
+  transform: none;
+}
+
+#studentattendanceDiv .table {
+  position: relative;
+  border: solid #ebebeb;
+  border-width: 0 1px 0 0;
+  overscroll-behavior: contain;
+}
+
+#studentattendanceDiv .headers {
+  top: 40px;
+  position: -webkit-sticky;
+  position: sticky;
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.04);
+}
+
+#studentattendanceDiv .tracks,
+#studentattendanceDiv .scroller {
+  display: flex;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+#studentattendanceDiv .scroller {
+  overflow-x: hidden;
+  flex: 1;
+}
+
+#studentattendanceDiv .tracks {
+  overflow: auto;
+}
+
+#studentattendanceDiv .tracks::-webkit-scrollbar,
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+
+#studentattendanceDiv .track {
+  flex: 1 0 7%;
+}
+
+#studentattendanceDiv .track + .track {
+  margin-left: -1px;
+  border: 1px solid #ebebeb;
+}
+
+#studentattendanceDiv .time {
+  flex: 0 0 150px;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  background: white;
+}
+
+#studentattendanceDiv .headers .time {
+  z-index: 5;
+}
+
+#studentattendanceDiv .tracks .time {
+  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.05);
+}
+
+#studentattendanceDiv time {
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+}
+
+#studentattendanceDiv time {
+  color: hsl(210, 5%, 70%);
+  text-align: right;
+}
+
+#studentattendanceDiv .time .heading {
+  justify-content: flex-end;
+  padding-right: 1em;
+  font-weight: 500;
+  /*background: #f9f9f9;*/
+}
+
+#studentattendanceDiv .heading {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  /*border: solid #ebebeb;*/
+  /*border-width: 1px;*/
+  /*color: hsla(210, 5%, 40%, 1);*/
+  z-index: 1;
+  /*background: #f7f9fb;*/
+  font-weight: 700;
+}
+
+#studentattendanceDiv .entry {
+  border-bottom: 1px solid #ebebeb;
+  border-top: 0;
+  background: #fdfdfd;
+  min-height: 5em;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+#studentattendanceDiv .entry:not(:last-of-type) {
+  border-bottom-style: dashed;
+}
+
+#studentattendanceDiv .track:last-of-type > div {
+  border-right: 0;
+}
+
+#studentattendanceDiv .time .entry,
+#studentattendanceDiv .time .heading {
+  position: relative;
+  border-color: transparent #ebebeb #ebebeb transparent;
+  border-color: transparent #ebebeb transparent transparent;
+}
+
+#studentattendanceDiv .time .entry:after,
+#studentattendanceDiv .time .heading:after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 50%;
+  height: 1px;
+  z-index: 3;
+  background: linear-gradient(to left, #ebebeb, #fdfdfd);
+}
+
+#top-of-site-pixel-anchor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  top: 15em;
+  left: 0;
+}
+
+
+#studentattendanceDiv .buttons {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  z-index: 6;
+  height: 100%;
+  padding: 1px 0;
+  width: calc(100% - 125px);
+}
+
+#studentattendanceDiv button {
+  border-radius: 0;
+  border: 0;
+  padding: 5px;
+  font: inherit;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  outline: none !important;
+  cursor: pointer;
+  background: var(--thead-bg);
+}
+
+#studentattendanceDiv button > svg {
+  line-height: 0;
+  width: 30px;
+  height: 30px;
+  fill: var(--thead-color);
+  pointer-events: none;
+}
+
+#studentattendanceDiv .btn-left {
+  transform: scaleX(-1);
+}
+
+@media (max-width: 767px) {
+  #studentattendanceDiv .track:not(.time) {
+    flex: 1 0 calc(50% + 7px);
+  }
+}
+
+.card-flip{
+  position: relative;
+  transition: all 0.5s ease-out;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+.card-flip .front,
+.card-flip .back {
+  position: absolute;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.card-flip .back{
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+.flipped {
+  -webkit-transform: rotateY(-180deg);
+  -moz-transform: rotateY(-180deg);
+  -ms-transform: rotateY(-180deg);
+  transform: rotateY(-180deg);
+}
+
+.card-flip {
+  perspective: 1000px;
+}
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-flip,
+.front,
+.back {
+  width: 100%;
+  min-height: 390px;
+}
+
+.flip {
+  transition: 0.6s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.front,
+.back {
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+
+

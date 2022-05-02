@@ -39,7 +39,8 @@ class ScheduletypeCtrl extends Controller
         return  Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('name', function(Scheduletype $scheduletype) {
-                    return $scheduletype->name;
+                    $name = '<span class="badge px-3" style="background-color:'.$scheduletype->bgcolor.'; color:'.$scheduletype->txtcolor.'">'.$scheduletype->name.'</span>';
+                    return $name;
                 })
                 ->addColumn('action', function($row){
 
@@ -49,7 +50,7 @@ class ScheduletypeCtrl extends Controller
                         $btn = '<div class="">';
                         
 
-                        $btn .= '<button type="button" class="btn btn-outline-warning me-2 editBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="'.$toggleEdit.'" data-id="'.$row->id.'" data-name="'.$row->name.'">
+                        $btn .= '<button type="button" class="btn btn-outline-warning me-2 editBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="'.$toggleEdit.'" data-id="'.$row->id.'" data-name="'.$row->name.'" data-bgcolor="'.$row->bgcolor.'" data-txtcolor="'.$row->txtcolor.'">
                                     <i class="bi bi-gear-fill"></i> 
                                 </button>';
                         $btn .= '<button type="button" class="btn btn-outline-danger me-2 deleteBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="'.$toggleDelete.'" data-id="'.$row->id.'" data-name="'.$row->name.'">
@@ -127,6 +128,9 @@ class ScheduletypeCtrl extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $name = $request->name;
+        $txtcolor = $request->txtcolor;
+        $bgcolor = $request->bgcolor;
+
 
         $authuser = Auth::user();
         $authuser_id = Auth::id();
@@ -137,6 +141,8 @@ class ScheduletypeCtrl extends Controller
         // Data Insert
         $scheduletype = new Scheduletype;
         $scheduletype->name = $name;
+        $scheduletype->txtcolor = $txtcolor;
+        $scheduletype->bgcolor = $bgcolor;
         $scheduletype->user_id = $authuser_id;
         $scheduletype->school_id = $user->school_id;
         $scheduletype->save();      
@@ -212,6 +218,9 @@ class ScheduletypeCtrl extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $name = $request->name;
+        $txtcolor = $request->txtcolor;
+        $bgcolor = $request->bgcolor;
+
 
         $authuser = Auth::user();
         $authuser_id = Auth::id();
@@ -221,6 +230,8 @@ class ScheduletypeCtrl extends Controller
 
         $data = array(
             'name'  =>  $name,
+            'txtcolor'  =>  $txtcolor,
+            'bgcolor'  =>  $bgcolor,
             'user_id' => $authuser_id
         );
 

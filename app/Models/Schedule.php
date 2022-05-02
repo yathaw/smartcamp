@@ -11,7 +11,7 @@ class Schedule extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['title', 'date', 'starttime', 'endtime', 'color', 'batch_id', 'teachersegment_id', 'staff_id', 'school_id', 'scheduletype_id'];
+    protected $fillable=['title', 'day', 'teachersegment_id', 'batch_id', 'staff_id', 'school_id'];
 
     public function batch()
     {
@@ -38,8 +38,5 @@ class Schedule extends Model
         return $this->belongsTo('App\Models\Scheduletype');
     }
 
-    public function attendances()
-    {
-        return $this->hasMany('App\Models\Attendance');
-    }
+    
 }
