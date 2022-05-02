@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 hero-img" data-aos="zoom-out" data-aos-delay="200">
-                    <img src="{{ asset('assets/img/sample2.png') }}" class="img-fluid" alt="">
+                    <img src="{{ asset('assets/img/sample.png') }}" class="img-fluid" alt="">
                 </div>
             </div>
         </div>
@@ -203,9 +203,7 @@
                 
             </div>
 
-            <div class="text-center col-6 mx-auto mt-5">
-                <a href="#" class="btn-read-more"><span> {{ __("See All Features") }} </span> <i class="bi bi-arrow-right"></i></a>
-            </div>
+            
         </div>
     </section>
     <!-- End Services Section -->

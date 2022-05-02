@@ -24,9 +24,9 @@
             <nav id="navbar" class="navbar">
                 <ul>
                     <li><a class="nav-link scrollto active" href="{{ route('index') }}">{{ __('Home') }}</a></li>
-                    <li><a href="blog.html">{{ __('Quick Tour') }}</a></li>
-                    <li><a href="blog.html">{{ __('Pricing') }}</a></li>
-                    <li><a href="blog.html">{{ __('Features') }}</a></li>
+                    <li><a class="nav-link scrollto" href="#footer">{{ __('Quick Tour') }}</a></li>
+                    {{-- <li><a href="blog.html">{{ __('Pricing') }}</a></li> --}}
+                    <li><a class="nav-link scrollto" href="#services">{{ __('Features') }}</a></li>
 
                     <li class="dropdown">
                         <a href="#"><span>{{ $language }}</span> <i class="bi bi-chevron-down"></i></a>
