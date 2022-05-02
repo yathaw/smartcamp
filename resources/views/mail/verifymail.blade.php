@@ -1,6 +1,8 @@
 <?php 
 	$name = $data['name'];
 	$verifyNo = $data['verifyNo'];
+	$loginemail = $data['loginemail'];
+
 	$verifyNos = str_split($data['verifyNo']);
 	$number1 = $verifyNos[0];
 	$number2 = $verifyNos[1];
@@ -101,7 +103,7 @@
   														<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hey {{ $name }},</h2>
 														
 														<p>Thank you for joining SMART CAMP!</p>
-														<p> To complete your sign up process, use the code below to verify your email: </p>
+														<p> To complete your sign up process, use the code below to verify your email and your login email code is : <b> {{ $loginemail }} </b> </p>
 
           											</div>
           										</td>

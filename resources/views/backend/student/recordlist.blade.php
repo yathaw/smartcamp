@@ -48,39 +48,40 @@
 
                                                     <div id="collapse_attendance{{ $studentsegment->id }}" class="accordion-collapse collapse  @if($key == 0) show @endif" aria-labelledby="heading_attendance{{ $studentsegment->id }}" data-bs-parent="#accordionExample">
                                                         <div class="accordion-body">
-                                                            
-                                                            @php
-                                                                $recording = $studentsegment->batch->recordings;
-                                                            @endphp
-                                                            @if(!$recording->isEmpty())
-                                                                @foreach($recordings as $recording)
-                                                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12" >
-                                                                    <div class="card shadow-none border">
-                                                                        
-                                                                        <div class="card-body">
-                                                                            <h5 class="card-title">{{ $recording->title }}</h5>
+                                                            <div class="row">
+                                                                @php
+                                                                    $recordings = $studentsegment->batch->recordings;
+                                                                @endphp
+                                                                @if(!$recordings->isEmpty())
+                                                                    @foreach($recordings as $recording)
+                                                                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12" >
+                                                                        <div class="card shadow-none border">
+                                                                            
+                                                                            <div class="card-body">
+                                                                                <h5 class="card-title">{{ $recording->title }}</h5>
 
-                                                                            <div class="d-grid gap-2">
-                                                                                <a href="{{ route('master.recording.show', $recording->id) }}" class="btn btn-primary">
-                                                                                    <i class="bi bi-play-fill me-2"></i> View Video 
-                                                                                </a>
-                                                                            </div>
-                                                                            @if(!in_array($authRole,["Guardian","Student"]))
-                                                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
-                                                                                
-                                                                                <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm deleteBtn" data-id="{{ $recording->id }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('Remove') }}" >
-                                                                                    <i class="bi bi-x-lg"></i> 
-                                                                                </a>
+                                                                                <div class="d-grid gap-2">
+                                                                                    <a href="{{ route('master.recording.show', $recording->id) }}" class="btn btn-primary">
+                                                                                        <i class="bi bi-play-fill me-2"></i> View Video 
+                                                                                    </a>
+                                                                                </div>
+                                                                                @if(!in_array($authRole,["Guardian","Student"]))
+                                                                                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                                                                                    
+                                                                                    <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm deleteBtn" data-id="{{ $recording->id }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('Remove') }}" >
+                                                                                        <i class="bi bi-x-lg"></i> 
+                                                                                    </a>
 
+                                                                                </div>
+                                                                                @endif
                                                                             </div>
-                                                                            @endif
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                                @endforeach
-                                                            @else
-                                                                <h3> There have no recording. </h3>
-                                                            @endif
+                                                                    @endforeach
+                                                                @else
+                                                                    <h3> There have no recording. </h3>
+                                                                @endif
+                                                            </div>
 
                                                         </div>
                                                     </div>
@@ -111,39 +112,40 @@
 
                                                 <div id="collapse_attendance{{ $studentsegment->id }}" class="accordion-collapse collapse  @if($key == 0) show @endif" aria-labelledby="heading_attendance{{ $studentsegment->id }}" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
-                                                        
-                                                        @php
-                                                            $recordings = $studentsegment->batch->recordings;
-                                                        @endphp
-                                                        @if(!$recordings->isEmpty())
-                                                        @foreach($recordings as $recording)
-                                                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12" >
-                                                                <div class="card shadow-none border">
-                                                                    
-                                                                    <div class="card-body">
-                                                                        <h5 class="card-title">{{ $recording->title }}</h5>
+                                                        <div class="row">
+                                                            @php
+                                                                $recordings = $studentsegment->batch->recordings;
+                                                            @endphp
+                                                            @if(!$recordings->isEmpty())
+                                                            @foreach($recordings as $recording)
+                                                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12" >
+                                                                    <div class="card shadow-none border">
+                                                                        
+                                                                        <div class="card-body">
+                                                                            <h5 class="card-title">{{ $recording->title }}</h5>
 
-                                                                        <div class="d-grid gap-2">
-                                                                            <a href="{{ route('master.recording.show', $recording->id) }}" class="btn btn-primary">
-                                                                                <i class="bi bi-play-fill me-2"></i> View Video 
-                                                                            </a>
-                                                                        </div>
-                                                                        @if(!in_array($authRole,["Guardian","Student"]))
-                                                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
-                                                                            
-                                                                            <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm deleteBtn" data-id="{{ $recording->id }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('Remove') }}" >
-                                                                                <i class="bi bi-x-lg"></i> 
-                                                                            </a>
+                                                                            <div class="d-grid gap-2">
+                                                                                <a href="{{ route('master.recording.show', $recording->id) }}" class="btn btn-primary">
+                                                                                    <i class="bi bi-play-fill me-2"></i> View Video 
+                                                                                </a>
+                                                                            </div>
+                                                                            @if(!in_array($authRole,["Guardian","Student"]))
+                                                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                                                                                
+                                                                                <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm deleteBtn" data-id="{{ $recording->id }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('Remove') }}" >
+                                                                                    <i class="bi bi-x-lg"></i> 
+                                                                                </a>
 
+                                                                            </div>
+                                                                            @endif
                                                                         </div>
-                                                                        @endif
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            @endforeach
-                                                        @else
-                                                            <h3> There have no recording. </h3>
-                                                        @endif
+                                                                @endforeach
+                                                            @else
+                                                                <h3> There have no recording. </h3>
+                                                            @endif
+                                                        </div>
 
                                                     </div>
                                                 </div>

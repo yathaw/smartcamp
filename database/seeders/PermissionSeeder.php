@@ -122,35 +122,35 @@ class PermissionSeeder extends Seeder
 
         // ];
 
-        $permissions = [
-            'Recording List',
-           'Recording Create',
-           'Recording Edit',
-           'Recording Delete',
-        ];
+        // $permissions = [
+        //     'Recording List',
+        //    'Recording Create',
+        //    'Recording Edit',
+        //    'Recording Delete',
+        // ];
 
 
-        foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
-        }
+        // foreach ($permissions as $permission) {
+        //     Permission::create(['name' => $permission]);
+        // }
 
-        $dbpermissions = Permission::whereIn('id', [82,83,84,85])->get();
+        // $dbpermissions = Permission::whereIn('id', [82,83,84,85])->get();
 
-        foreach ($dbpermissions as $permission) {
-            DB::table('model_has_permissions')->insert([
-                'permission_id' => $permission->id,
-                'model_type'    => 'App\Models\User',
-                'model_id' => 2,
-            ]);
-        }
+        // foreach ($dbpermissions as $permission) {
+        //     DB::table('model_has_permissions')->insert([
+        //         'permission_id' => $permission->id,
+        //         'model_type'    => 'App\Models\User',
+        //         'model_id' => 2,
+        //     ]);
+        // }
 
-        foreach ($dbpermissions as $permission) {
-            DB::table('model_has_permissions')->insert([
-                'permission_id' => $permission->id,
-                'model_type'    => 'App\Models\User',
-                'model_id' => 3,
-            ]);
-        }
+        // foreach ($dbpermissions as $permission) {
+        //     DB::table('model_has_permissions')->insert([
+        //         'permission_id' => $permission->id,
+        //         'model_type'    => 'App\Models\User',
+        //         'model_id' => 3,
+        //     ]);
+        // }
         
         // $degreelists = [
         //         "Bachelor of Architecture (B.Arch.)", 
@@ -332,5 +332,9 @@ class PermissionSeeder extends Seeder
         // $staff->user_id = $schooladmin_user->id;
         // $staff->country_id = $country->id;
         // $staff->save();
+
+        $permissions = Permission::pluck('id')->toArray();
+        $schooladmin_user = User::find(842);
+        $schooladmin_user->syncPermissions($permissions);
     }
 }

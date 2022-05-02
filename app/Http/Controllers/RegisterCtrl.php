@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Country;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 use App\Models\Interest;
 use App\Models\Socialmedia;
 use App\Models\Softwareanalytic;
@@ -273,41 +275,45 @@ class RegisterCtrl extends Controller
 
         $verifyNo = substr(number_format(time() * rand(),0,'',''),0,6);
 
-        $school = School::create([
-            'name' => $schoolname,
-            'studentamount' => $nos
-        ]);
+        $school = new School();
+        $school->name = $schoolname;
+        $school->studentamount = $nos;
+        $school->save();
 
-        $user =User::create([
-            'name' => $name,
-            'email' => $generateEmail.'.smartcamp.com',
-            'password' => Hash::make($password),
-            'school_id' => $school->id
-        ]);
+        $user = new User();
+        $user->name = $name;
+        $user->email = $generateEmail.'.smartcamp.com';
+        $user->password = Hash::make($password);
+        $user->school_id = $school->id;
+        $user->save();
 
-        $verifyUser = VerifyUser::create([
-            'user_id' => $user->id,
-            'token' => sha1($verifyNo)
-        ]);
+        $verifyUser = new VerifyUser();
+        $verifyUser->user_id = $user->id;
+        $verifyUser->token = sha1($verifyNo);
+        $verifyUser->save();
+
         $user->assignRole($roleid);
 
-        $staff = Staff::create([
-            'workemail' => $email,
-            'phone' => json_encode($phone),
-            'user_id' => $user->id,
-            'country_id' => $countryid,
-            'status' => 'Ongoing'
-        ]);
+        // $schooladmin_user->assignRole('School Admin');
+        $permissions = Permission::pluck('id')->toArray();
+        $schooladmin_user->syncPermissions($permissions);
+
+        $staff = new Staff();
+        $staff->workemail = $email;
+        $staff->phone = json_encode($phone);
+        $staff->user_id = $user->id;
+        $staff->country_id = $countryid;
+        $staff->status = 'Ongoing';
+        $staff->save();
 
         
         $school->socailmedias()->attach(['socialmedia_id'=>1],['link'=>$socialmedia]);
 
-
-        $softwareanalytic = Softwareanalytic::create([
-            'reason' => $reason,
-            'user_id' => $user->id,
-            'school_id' => $school->id
-        ]);
+        $softwareanalytic = new Softwareanalytic();
+        $softwareanalytic->reason = $reason;
+        $softwareanalytic->user_id = $user->id;
+        $softwareanalytic->school_id = $school->id;
+        $softwareanalytic->save();
 
         foreach($interestids as $interestid){
             $softwareanalytic->interests()->attach($interestid, ['school_id'=>$school->id]);
@@ -323,7 +329,8 @@ class RegisterCtrl extends Controller
 
         $data = [
             "name" => $name,
-            "verifyNo" => $verifyNo
+            "verifyNo" => $verifyNo,
+            "loginemail" => $user->email
         ];
 
         Mail::send('mail.verifymail', compact('data'), function ($message) use ($email,$from,$subject){
@@ -976,7 +983,7 @@ class RegisterCtrl extends Controller
         $staff->user_id = $user->id;
         $staff->save();
 
-        return \Redirect::route('controlpanel');
+        return \Redirect::route('master.school.index');
 
 
     }
